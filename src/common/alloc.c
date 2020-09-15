@@ -16,20 +16,33 @@ struct String make_string(long initial_capacity)
 	char *str_contents = malloc(sizeof(char) * (initial_capacity + 1));
 	str_contents[0] = '\0';
 
-	return (struct String) { initial_capacity + 1, 1, str_contents };
+	return (struct String) { initial_capacity + 1, 0, str_contents };
+}
+
+/**
+ * Deallocates the given String.
+ *
+ * @param string the string to deallocate
+ */
+void destroy_string(struct String *string)
+{
+    free(string->contents);
 }
 
 /**
  * Pushes a character to the provided string buffer.
  *
- * @param string the string to which the character should be pushed
+ * @param string the string onto which the character should be pushed
  * @param c the character that should be pushed onto the string
  */
 void push_string(struct String *string, char c)
 {
 	if (++string->length >= string->capacity) {
-		expand_string(string, 1);		
+		expand_string(string, 1);
 	}
+
+    string->contents[string->length - 1] = c;
+    string->contents[string->length] = '\0';
 }
 
 /**

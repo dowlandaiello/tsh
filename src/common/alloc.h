@@ -23,6 +23,13 @@ struct String {
 struct String make_string(long initial_capacity);
 
 /**
+ * Deallocates the given String.
+ *
+ * @param string the string to deallocate
+ */
+void destroy_string(struct String *string);
+
+/**
  * Pushes a character to the provided string buffer.
  *
  * @param string the string to which the character should be pushed
