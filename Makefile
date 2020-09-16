@@ -1,14 +1,6 @@
-ROOT_DIR := $(shell pwd)
+# Builds the tiny shell
+tsh: tsh.o
+	clang tsh.o -o tsh
 
-test: $(wildcard $(ROOT_DIR)/tests/**/*)
-	@echo "RUNNING TESTS: " $^; echo ""
-
-	for f in "$^"; do \
-		echo "RUNNING TEST: '" $$f "'" && echo "" && \
-		clang $$f -I $(ROOT_DIR)/src -o test && \
-		./test && \
-		rm test && \
-		echo "" && echo "DONE"; \
-	done
-
-	@echo ""; echo "DONE WITH ALL"
+tsh.o:
+	clang -c src/main.c -o tsh.o
