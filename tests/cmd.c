@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <assert.h>
+
 #include "cmd.h"
 
 int main()
@@ -10,6 +13,16 @@ int main()
 
                 push_arg_arg_list(&args, arg);
         }
+
+        for (int i = 0; i < args.length; i++) {
+                printf("%s ", args.args[i].contents);
+        }
+
+        printf("\n");
+
+        assert(args.length == 69);
+
+        destroy_arg_list(&args);
 
         return 0;
 }

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "common/alloc.c"
+#include "common/alloc.h"
 
 int main()
 {
