@@ -26,7 +26,7 @@ struct String make_string(long initial_capacity)
  */
 void destroy_string(struct String *string)
 {
-    free(string->contents);
+        free(string->contents);
 }
 
 /**
@@ -37,12 +37,12 @@ void destroy_string(struct String *string)
  */
 void push_string(struct String *string, char c)
 {
-	if (++string->length >= string->capacity) {
-		expand_string(string, 1);
+        if (++string->length >= string->capacity) {
+                expand_string(string, 1);
 	}
 
-    string->contents[string->length - 1] = c;
-    string->contents[string->length] = '\0';
+        string->contents[string->length - 1] = c;
+        string->contents[string->length] = '\0';
 }
 
 /**
@@ -71,5 +71,5 @@ long expand_string(struct String *string, long added_capacity)
 	free(string->contents);
 	string->contents = new_contents;
 
-    return string->capacity;
+        return string->capacity;
 }
