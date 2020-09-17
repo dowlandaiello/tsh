@@ -1,16 +1,15 @@
 /**
  * A dynamic-length datatype representing a String.
  */
-struct String
-{
-        /* The number of characters storable in the string */
-        long capacity;
+struct String {
+    /* The number of characters storable in the string */
+    long capacity;
 
-        /* The number of characters in the string */
-        long length;
+    /* The number of characters in the string */
+    long length;
 
-        /* The constituent characters of the string */
-        char *contents;
+    /* The constituent characters of the string */
+    char *contents;
 };
 
 /**
@@ -50,7 +49,7 @@ void push_string(struct String *string, char c);
 /**
  * Adds the given number of characters to the capacity of the String.
  * NOTE: This operation is O(n) where n is the length of the String,
- * as it requires copying the old items 
+ * as it requires copying the old items
  *
  * @param string the string of which the capacity should be expanded
  * @param added_capacity the number of characters by which the String's

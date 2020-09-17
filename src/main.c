@@ -21,7 +21,7 @@ void show_prompt()
 
     struct Cmd cmd = parse_cmd(&input);
     int ret_status = execute_cmd(&cmd);
-    
+
     if (ret_status == -1)
         return show_prompt();
 

@@ -13,10 +13,10 @@
  */
 struct String make_string(long initial_capacity)
 {
-        char *str_contents = malloc(sizeof(char) * (initial_capacity + 1));
-        str_contents[0] = '\0';
+    char *str_contents = malloc(sizeof(char) * (initial_capacity + 1));
+    str_contents[0] = '\0';
 
-        return (struct String){initial_capacity + 1, 0, str_contents};
+    return (struct String){ initial_capacity + 1, 0, str_contents };
 }
 
 /**
@@ -30,7 +30,7 @@ struct String make_string(long initial_capacity)
  */
 struct String derive_string(char *s)
 {
-        return (struct String){0, strlen(s), s};
+    return (struct String){ 0, strlen(s), s };
 }
 
 /**
@@ -40,7 +40,7 @@ struct String derive_string(char *s)
  */
 void destroy_string(struct String *string)
 {
-        free(string->contents);
+    free(string->contents);
 }
 
 /**
@@ -51,19 +51,18 @@ void destroy_string(struct String *string)
  */
 void push_string(struct String *string, char c)
 {
-        if (++string->length >= string->capacity)
-        {
-                expand_string(string, 1);
-        }
+    if (++string->length >= string->capacity) {
+        expand_string(string, 1);
+    }
 
-        string->contents[string->length - 1] = c;
-        string->contents[string->length] = '\0';
+    string->contents[string->length - 1] = c;
+    string->contents[string->length] = '\0';
 }
 
 /**
  * Adds the given number of characters to the capacity of the String.
  * NOTE: This operation is O(n) where n is the length of the String,
- * as it requires copying the old items 
+ * as it requires copying the old items
  *
  * @param string the string of which the capacity should be expanded
  * @param added_capacity the number of characters by which the String's
@@ -73,18 +72,19 @@ void push_string(struct String *string, char c)
  */
 long expand_string(struct String *string, long added_capacity)
 {
-        // Allocate a new buffer to store the contents of the string
-        char *new_contents = malloc(sizeof(char) * (string->capacity + added_capacity));
+    // Allocate a new buffer to store the contents of the string
+    char *new_contents =
+        malloc(sizeof(char) * (string->capacity + added_capacity));
 
-        // Expand the string
-        string->capacity++;
+    // Expand the string
+    string->capacity++;
 
-        // Copy the old items into the new buffer
-        strcpy(new_contents, string->contents);
+    // Copy the old items into the new buffer
+    strcpy(new_contents, string->contents);
 
-        // Replace the old buffer with the new buffer
-        free(string->contents);
-        string->contents = new_contents;
+    // Replace the old buffer with the new buffer
+    free(string->contents);
+    string->contents = new_contents;
 
-        return string->capacity;
+    return string->capacity;
 }

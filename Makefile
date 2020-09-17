@@ -13,7 +13,7 @@ src/%:
 # Builds and runs individual test files
 tests/%:
 	@echo "RUNNING TEST " $@; echo ""
-	cc -Isrc $(shell find src -name *.c ! -path 'src/main.c') $@.c -o $@ && $@ && rm $@
+	cc -Isrc $(source_files) $@.c -o $@ && $@ && rm $@
 	@echo ""; echo "DONE"; echo ""
 
 # Builds an individual example file
@@ -45,7 +45,7 @@ test: examples $(test_binaries) clean_examples
 
 .PHONY: format
 format:
-	clang-format -i tests/**.c src/**.c src/**.h -style=file
+	clang-format -i $(shell find . -name *.c -or -name *.h) -style=file
 
 # Removes all object files, and deletes the built shell
 .PHONY: clean
