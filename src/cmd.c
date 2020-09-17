@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #include "cmd.h"
 
@@ -180,4 +181,6 @@ int execute_cmd(struct Cmd *cmd)
 
     wait(NULL);
     free(argv);
+
+    return 0;
 }

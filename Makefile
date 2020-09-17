@@ -13,7 +13,7 @@ tsh.o:
 # Builds and runs individual test files
 tests/%:
 	@echo "RUNNING TEST " $@; echo ""
-	cc -Isrc $(shell find src -name *.c) $@.c -o $@ && $@ && rm $@
+	cc -Isrc $(shell find src -name *.c ! -path 'src/main.c') $@.c -o $@ && $@ && rm $@
 	@echo ""; echo "DONE"; echo ""
 
 # Builds an individual example file
