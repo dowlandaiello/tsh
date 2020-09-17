@@ -1,9 +1,9 @@
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/wait.h>
 #include <unistd.h>
+#include <sys/wait.h>
+#include <limits.h>
 
 #include "cmd.h"
 
@@ -112,6 +112,9 @@ struct Cmd parse_cmd(struct String *cmd)
     struct Cmd parsed_cmd = { derive_string(target), make_arg_list() };
     struct String current_arg_buff = make_string(8);
 
+    // The called script should know the name by which it was called
+    push_arg_arg_list(&parsed_cmd.args, parsed_cmd.target_program);
+
     for (; target_len <= cmd->length; target_len++) {
         char curr = cmd->contents[target_len];
 
@@ -178,9 +181,8 @@ int execute_cmd(struct Cmd *cmd)
     } else if (strcmp(raw_target, "dirs") == 0) {
 
     } else if (strcmp(raw_target, "echo") == 0) {
-        printf("%s\n", cmd->args.args[0].contents);
-
-        return 0;
+        cmd->target_program.contents = "/bin/echo";
+        status_code = -1;
     } else if (strcmp(raw_target, "export") == 0) {
 
     } else if (strcmp(raw_target, "pwd") == 0) {
@@ -189,13 +191,13 @@ int execute_cmd(struct Cmd *cmd)
 
         return 0;
     } else if (strcmp(raw_target, "ls") == 0) {
+        cmd->target_program.contents = "/bin/ls";
+        status_code = -1;
+
         if (argv[0] == NULL) {
             argv_empty = 1;
 
             argv[0] = ".";
-            cmd->target_program.contents = "/bin/ls";
-
-            status_code = -1;
         }
     }
 
