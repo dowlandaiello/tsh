@@ -5,18 +5,24 @@ tsh: tsh.o
 tsh.o:
 	cc -c src/main.c -o tsh.o
 
-debug:
-	cc -g -Isrc $(shell find src -name *.c) $(f) -o debug && lldb debug && rm debug
-
 # Builds and runs individual test files
 tests/%:
 	@echo "RUNNING TEST " $@; echo ""
 	cc -Isrc $(shell find src -name *.c) $@.c -o $@ && $@ && rm $@
 	@echo ""; echo "DONE"; echo ""
 
+# Debugs the specified file
+.PHONY: debug
+debug:
+	cc -g -Isrc $(shell find src -name *.c) $(f) -o debug && lldb debug && rm debug
+
 # Runs all unit tests
 .PHONY: test
 test: $(subst .c, , $(wildcard tests/*))
+
+.PHONY: format
+format:
+	clang-format -i tests/**.c src/**.c src/**.h -style=file
 
 # Removes all object files, and deletes the built shell
 .PHONY: clean

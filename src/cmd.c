@@ -9,7 +9,10 @@
  */
 struct ArgList make_arg_list()
 {
-    return (struct ArgList) { DEFAULT_ARGLIST_CAPACITY, 0, malloc(sizeof(struct String) * DEFAULT_ARGLIST_CAPACITY) };
+    return (struct ArgList){ DEFAULT_ARGLIST_CAPACITY,
+                             0,
+                             malloc(sizeof(struct String) *
+                                    DEFAULT_ARGLIST_CAPACITY) };
 }
 
 /**
@@ -20,7 +23,8 @@ struct ArgList make_arg_list()
  */
 void expand_arg_list(struct ArgList* args, long added_capacity)
 {
-    struct String* new_args = malloc(sizeof(struct String) * args->length + added_capacity);
+    struct String* new_args =
+        malloc(sizeof(struct String) * args->length + added_capacity);
 
     for (int i = 0; i < args->length; i++) {
         new_args[i] = args->args[i];
@@ -68,7 +72,9 @@ struct Cmd parse_cmd(struct String* cmd)
 {
     long target_len = 0;
 
-    for (; cmd->contents[target_len] != ' ' && cmd->contents[target_len] != '\0' && target_len < cmd->length; target_len++)
+    for (; cmd->contents[target_len] != ' ' &&
+           cmd->contents[target_len] != '\0' && target_len < cmd->length;
+         target_len++)
         ;
 
     // Fetch the target of the command string (e.g., "target arg1 arg2")

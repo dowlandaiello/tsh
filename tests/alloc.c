@@ -20,7 +20,7 @@ int main()
 
         destroy_string(&my_string);
 
-        char *test_str = "a";
+        char* test_str = "a";
 
         // Make sure a char* can be converted to a String
         struct String derived_string = derive_string(test_str);

@@ -6,7 +6,8 @@
 /**
  * A list of arguments passed to a program via the tsh command line.
  */
-struct ArgList {
+struct ArgList
+{
     /* The number of arguments that may be stored in the argument list */
     long capacity;
 
@@ -40,7 +41,8 @@ void destroy_arg_list(struct ArgList* args);
 /**
  * A tsh command passed via the command line.
  */
-struct Cmd {
+struct Cmd
+{
     /* The program targeted by the command */
     struct String target_program;
 
