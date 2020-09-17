@@ -74,11 +74,12 @@ struct Cmd parse_cmd(struct String* cmd)
     // Fetch the target of the command string (e.g., "target arg1 arg2")
     char* target = malloc(sizeof(char) * (target_len + 1));
     strncpy(target, cmd->contents, target_len);
+    target[target_len] = '\0';
 
     struct Cmd parsed_cmd = { derive_string(target), make_arg_list() };
     struct String current_arg_buff = make_string(8);
 
-    for (; target_len < cmd->length; target_len++) {
+    for (; target_len <= cmd->length; target_len++) {
         char curr = cmd->contents[target_len];
 
         // Once the next argument is reached, clear the arg buffer and store
@@ -93,8 +94,11 @@ struct Cmd parse_cmd(struct String* cmd)
         }
 
         // Once a null char is found, we're done!
-        if (curr == '\0')
+        if (curr == '\0' || curr == '\n') {
+            if (current_arg_buff.length > 0)
+                push_arg_arg_list(&parsed_cmd.args, current_arg_buff);
             break;
+        }
 
         push_string(&current_arg_buff, curr);
     }

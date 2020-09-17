@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "common/alloc.h"
 
@@ -19,9 +20,11 @@ int main()
 
         destroy_string(&my_string);
 
+        char *test_str = "a";
+
         // Make sure a char* can be converted to a String
-        struct String derived_string = derive_string("a");
-        assert(my_string.contents[0] == 'a');
+        struct String derived_string = derive_string(test_str);
+        assert(strcmp(derived_string.contents, test_str) == 0);
     }
 
     return 0;

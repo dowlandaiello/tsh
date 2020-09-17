@@ -5,6 +5,9 @@ tsh: tsh.o
 tsh.o:
 	cc -c src/main.c -o tsh.o
 
+debug:
+	cc -g -Isrc $(shell find src -name *.c) $(f) -o debug && lldb debug && rm debug
+
 # Builds and runs individual test files
 tests/%:
 	@echo "RUNNING TEST " $@
@@ -18,7 +21,7 @@ test: $(subst .c, , $(wildcard tests/*))
 # Removes all object files, and deletes the built shell
 .PHONY: clean
 clean:
-	rm *.o tsh
+	rm *.o tsh debug
 
 .PHONY: all
 all: tsh test
