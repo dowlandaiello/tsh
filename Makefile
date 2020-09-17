@@ -10,9 +10,9 @@ debug:
 
 # Builds and runs individual test files
 tests/%:
-	@echo "RUNNING TEST " $@
+	@echo "RUNNING TEST " $@; echo ""
 	cc -Isrc $(shell find src -name *.c) $@.c -o $@ && $@ && rm $@
-	@echo "DONE"; echo ""
+	@echo ""; echo "DONE"; echo ""
 
 # Runs all unit tests
 .PHONY: test

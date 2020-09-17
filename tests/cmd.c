@@ -33,8 +33,6 @@ int main()
         char arg_val[5];
         sprintf(arg_val, "arg%d", i + 1);
 
-        printf("%s\n", parsed_cmd.args.args[i].contents);
-
         assert(strcmp(parsed_cmd.args.args[i].contents, arg_val) == 0);
     }
 
