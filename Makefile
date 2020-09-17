@@ -38,7 +38,7 @@ format:
 # Removes all object files, and deletes the built shell
 .PHONY: clean
 clean:
-	rm $(example_binaries) *.o tsh debug -f
+	rm -f $(example_binaries) *.o tsh debug
 
 .PHONY: all
 all: format tsh test

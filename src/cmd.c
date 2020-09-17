@@ -164,10 +164,14 @@ void execute_cmd(struct Cmd *cmd)
     // Generate a child process in which the program will be run
     if (fork() == 0) {
         if (execv(cmd->target_program.contents, argv)) {
-            fprintf(stderr, "Unable to spawn program %s\n", cmd->target_program.contents);
+            fprintf(stderr,
+                    "Unable to spawn program %s\n",
+                    cmd->target_program.contents);
+
+            exit(0);
         }
     }
 
+    wait(NULL);
     free(argv);
 }
-
