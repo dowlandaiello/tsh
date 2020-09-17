@@ -33,7 +33,7 @@ int main()
         char arg_val[5];
         sprintf(arg_val, "arg%d", i + 1);
 
-        assert(strcmp(parsed_cmd.args.args[i].contents, arg_val) == 0);
+        assert(strcmp(parsed_cmd.args.args[i + 1].contents, arg_val) == 0);
     }
 
     destroy_cmd(&parsed_cmd);
