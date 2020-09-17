@@ -13,10 +13,24 @@
  */
 struct String make_string(long initial_capacity)
 {
-	char *str_contents = malloc(sizeof(char) * (initial_capacity + 1));
-	str_contents[0] = '\0';
+        char *str_contents = malloc(sizeof(char) * (initial_capacity + 1));
+        str_contents[0] = '\0';
 
-	return (struct String) { initial_capacity + 1, 0, str_contents };
+        return (struct String){initial_capacity + 1, 0, str_contents};
+}
+
+/**
+ * Generates a dynamic String from the provided char array.
+ * NOTE: The given char array should NOT be destroyed
+ * until a character is pushed to the String.
+ *
+ * @param s the string from which the String should be derived
+ *
+ * @return the string
+ */
+struct String derive_string(char *s)
+{
+        return (struct String){0, strlen(s), s};
 }
 
 /**
@@ -37,9 +51,10 @@ void destroy_string(struct String *string)
  */
 void push_string(struct String *string, char c)
 {
-        if (++string->length >= string->capacity) {
+        if (++string->length >= string->capacity)
+        {
                 expand_string(string, 1);
-	}
+        }
 
         string->contents[string->length - 1] = c;
         string->contents[string->length] = '\0';
@@ -58,18 +73,18 @@ void push_string(struct String *string, char c)
  */
 long expand_string(struct String *string, long added_capacity)
 {
-	// Allocate a new buffer to store the contents of the string
-	char *new_contents = malloc(sizeof(char) * (string->capacity + added_capacity));
+        // Allocate a new buffer to store the contents of the string
+        char *new_contents = malloc(sizeof(char) * (string->capacity + added_capacity));
 
-	// Expand the string
-	string->capacity++;	
+        // Expand the string
+        string->capacity++;
 
-	// Copy the old items into the new buffer
-	strcpy(new_contents, string->contents);
+        // Copy the old items into the new buffer
+        strcpy(new_contents, string->contents);
 
-	// Replace the old buffer with the new buffer
-	free(string->contents);
-	string->contents = new_contents;
+        // Replace the old buffer with the new buffer
+        free(string->contents);
+        string->contents = new_contents;
 
         return string->capacity;
 }

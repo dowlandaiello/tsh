@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 
 #include "common/alloc.h"
 
@@ -17,6 +18,10 @@ int main()
         printf("%s\n", my_string.contents);
 
         destroy_string(&my_string);
+
+        // Make sure a char* can be converted to a String
+        struct String derived_string = derive_string("a");
+        assert(my_string.contents[0] == 'a');
     }
 
     return 0;
