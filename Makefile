@@ -1,3 +1,5 @@
+THIS_FILE := $(lastword $(MAKEFILE_LIST))
+
 test_binaries = $(subst .c, , $(wildcard tests/*))
 example_binaries = $(subst .c, , $(wildcard examples/*.c))
 
@@ -22,14 +24,19 @@ examples/%:
 .PHONY: examples
 examples: $(example_binaries)
 
+.PHONY: clean_examples
+clean_examples:
+	rm -f $(example_binaries)
+
 # Debugs the specified file
 .PHONY: debug
 debug: examples
 	cc -g -Isrc $(shell find src -name *.c) $(f) -o debug && lldb debug && rm debug
+	@$(MAKE) -f $(THIS_FILE) clean_examples
 
 # Runs all unit tests
 .PHONY: test
-test: examples $(test_binaries)
+test: examples $(test_binaries) clean_examples
 
 .PHONY: format
 format:
