@@ -34,6 +34,8 @@ void push_arg_arg_list(struct ArgList *args, struct String arg);
  * Converts a list of arguments to an array of char pointers.
  *
  * @param args the argument list to convert
+ *
+ * @return the arguments
  */
 char **to_argv(struct ArgList *args);
 
@@ -78,4 +80,4 @@ void destroy_cmd(struct Cmd *cmd);
  *
  * @return the status code
  */
-int execute_cmd(struct Cmd *cmd);
+void execute_cmd(struct Cmd *cmd);

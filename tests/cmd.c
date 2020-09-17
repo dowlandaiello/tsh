@@ -38,5 +38,12 @@ int main()
 
     destroy_cmd(&parsed_cmd);
 
+    // A program that will return 0
+    struct String raw_cmd = derive_string("./examples/test_program");
+    struct Cmd actual_cmd = parse_cmd(&raw_cmd);
+
+    execute_cmd(&actual_cmd);
+    destroy_cmd(&actual_cmd);
+
     return 0;
 }

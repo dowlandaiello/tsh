@@ -12,8 +12,8 @@ struct ArgList make_arg_list()
 {
     return (struct ArgList){ DEFAULT_ARGLIST_CAPACITY,
                              0,
-                             malloc(sizeof(struct String) *
-                                    DEFAULT_ARGLIST_CAPACITY) };
+                             calloc(DEFAULT_ARGLIST_CAPACITY,
+                                    sizeof(struct String)) };
 }
 
 /**
@@ -64,10 +64,14 @@ void push_arg_arg_list(struct ArgList *args, struct String arg)
  */
 char **to_argv(struct ArgList *args)
 {
-    char **argv = malloc(sizeof(char *) * args->length);
+    char **argv = calloc(args->length + 1, sizeof(char *));
+    int i;
 
-    for (int i = 0; i < args->length; i++)
+    for (i = 0; i < args->length; i++)
         argv[i] = args->args[i].contents;
+
+    // execv requires the last argument to be null
+    argv[i] = NULL;
 
     return argv;
 }
@@ -152,13 +156,18 @@ void destroy_cmd(struct Cmd *cmd)
  *
  * @return the status code
  */
-int execute_cmd(struct Cmd *cmd)
+void execute_cmd(struct Cmd *cmd)
 {
     // Convert the struct arguments to actual char arrays
     char **argv = to_argv(&cmd->args);
 
-    int res = execv(cmd->target_program.contents, argv);
-    free(argv);
+    // Generate a child process in which the program will be run
+    if (fork() == 0) {
+        if (execv(cmd->target_program.contents, argv)) {
+            fprintf(stderr, "Unable to spawn program %s\n", cmd->target_program.contents);
+        }
+    }
 
-    return res;
+    free(argv);
 }
+

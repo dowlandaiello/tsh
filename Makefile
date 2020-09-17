@@ -24,7 +24,7 @@ examples: $(example_binaries)
 
 # Debugs the specified file
 .PHONY: debug
-debug:
+debug: examples
 	cc -g -Isrc $(shell find src -name *.c) $(f) -o debug && lldb debug && rm debug
 
 # Runs all unit tests
