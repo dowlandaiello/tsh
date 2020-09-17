@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <limits.h>
 
 #include "cmd.h"
 
@@ -155,18 +156,48 @@ void destroy_cmd(struct Cmd *cmd)
  *
  * @param cmd the command to execute.
  *
- * @return whether or not the shell should terminate
+ * @return a special status code
+ * -1 => skip deallocation
+ *  0 => all good
+ * 1 => exit terminal
  */
 int execute_cmd(struct Cmd *cmd)
 {
     char *raw_target = cmd->target_program.contents;
 
-    if (strcmp(raw_target, "exit") == 0) {
-        return 1;
-    }
-
     // Convert the struct arguments to actual char arrays
     char **argv = to_argv(&cmd->args);
+    int argv_empty = 0, status_code = 0;
+
+    if (strcmp(raw_target, "exit") == 0) {
+        return 1;
+    } else if (strcmp(raw_target, "cd") == 0) {
+        chdir(cmd->args.args[0].contents);
+
+        return 0;
+    } else if (strcmp(raw_target, "dirs") == 0) {
+
+    } else if (strcmp(raw_target, "echo") == 0) {
+        printf("%s\n", cmd->args.args[0].contents);
+
+        return 0;
+    } else if (strcmp(raw_target, "export") == 0) {
+
+    } else if (strcmp(raw_target, "pwd") == 0) {
+        char current_path[PATH_MAX];
+        printf("%s\n", getcwd(current_path, sizeof(char) * PATH_MAX));
+
+        return 0;
+    } else if (strcmp(raw_target, "ls") == 0) {
+        if (argv[0] == NULL) {
+            argv_empty = 1;
+
+            argv[0] = ".";
+            cmd->target_program.contents = "/bin/ls";
+
+            status_code = -1;
+        }
+    }
 
     // Generate a child process in which the program will be run
     if (fork() == 0) {
@@ -180,7 +211,9 @@ int execute_cmd(struct Cmd *cmd)
     }
 
     wait(NULL);
-    free(argv);
 
-    return 0;
+    if (argv_empty == 0)
+        free(argv);
+
+    return status_code;
 }
