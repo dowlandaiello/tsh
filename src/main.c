@@ -8,15 +8,23 @@ void show_prompt()
 
     struct String input = make_string(8);
 
-    for (int c = getchar(); c != EOF && c != '\n'; c = getchar()) {
+    for (int c = getchar(); c != '\n'; c = getchar()) {
+        if (c == EOF) {
+            destroy_string(&input);
+            printf("\n");
+
+            return;
+        }
+
         push_string(&input, c);
     }
 
     struct Cmd cmd = parse_cmd(&input);
 
+    int ret_status = execute_cmd(&cmd);
     destroy_cmd(&cmd);
 
-    if (execute_cmd(&cmd) == -1) {
+    if (ret_status == -1) {
         return;
     }
 

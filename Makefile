@@ -2,13 +2,13 @@ THIS_FILE := $(lastword $(MAKEFILE_LIST))
 
 test_binaries = $(subst .c, , $(wildcard tests/*))
 example_binaries = $(subst .c, , $(wildcard examples/*.c))
+source_files = $(shell find src -name *.c ! -path 'src/main.c')
 
 # Builds the tiny shell
-tsh: tsh.o
-	cc tsh.o -o tsh
+tsh: $(source_files) src/main.c
+	cc -Isrc $(source_files) src/main.c -o tsh
 
-tsh.o:
-	cc -Isrc src/main.c -c -o tsh.o
+src/%:
 
 # Builds and runs individual test files
 tests/%:
@@ -19,6 +19,11 @@ tests/%:
 # Builds an individual example file
 examples/%:
 	cc $@.c -o $@
+
+# Install to path
+.PHONY: install
+install: tsh
+	cp tsh /usr/bin
 
 # Build all the example programs
 .PHONY: examples
