@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "cmd.h"
 
@@ -21,9 +22,9 @@ struct ArgList make_arg_list()
  * @param added_capacity the number of argument slots that should be added to
  * the argument list
  */
-void expand_arg_list(struct ArgList* args, long added_capacity)
+void expand_arg_list(struct ArgList *args, long added_capacity)
 {
-    struct String* new_args =
+    struct String *new_args =
         malloc(sizeof(struct String) * args->length + added_capacity);
 
     for (int i = 0; i < args->length; i++) {
@@ -42,7 +43,7 @@ void expand_arg_list(struct ArgList* args, long added_capacity)
  * @param args the argument list to which the argument should be pushed
  * @param arg the argument that should be pushed to the argument list
  */
-void push_arg_arg_list(struct ArgList* args, struct String arg)
+void push_arg_arg_list(struct ArgList *args, struct String arg)
 {
     if (++args->length > args->capacity) {
         expand_arg_list(args, 1);
@@ -52,11 +53,31 @@ void push_arg_arg_list(struct ArgList* args, struct String arg)
 }
 
 /**
+ * Converts a list of arguments to an array of char pointers.
+ *
+ * NOTE: This is an O(n) operation. This can be reduced to O(1)
+ * by pre-caching this conversion, but I'm too lazy to do that rn.
+ *
+ * @param args the argument list to convert
+ *
+ * @return the arguments
+ */
+char **to_argv(struct ArgList *args)
+{
+    char **argv = malloc(sizeof(char *) * args->length);
+
+    for (int i = 0; i < args->length; i++)
+        argv[i] = args->args[i].contents;
+
+    return argv;
+}
+
+/**
  * Deallocates the argument list.
  *
  * @param args the argument list that should be deallocated
  */
-void destroy_arg_list(struct ArgList* args)
+void destroy_arg_list(struct ArgList *args)
 {
     free(args->args);
 }
@@ -68,7 +89,7 @@ void destroy_arg_list(struct ArgList* args)
  *
  * @return the parsed command
  */
-struct Cmd parse_cmd(struct String* cmd)
+struct Cmd parse_cmd(struct String *cmd)
 {
     long target_len = 0;
 
@@ -78,7 +99,7 @@ struct Cmd parse_cmd(struct String* cmd)
         ;
 
     // Fetch the target of the command string (e.g., "target arg1 arg2")
-    char* target = malloc(sizeof(char) * (target_len + 1));
+    char *target = malloc(sizeof(char) * (target_len + 1));
     strncpy(target, cmd->contents, target_len);
     target[target_len] = '\0';
 
@@ -118,8 +139,26 @@ struct Cmd parse_cmd(struct String* cmd)
  *
  * @param cmd the command to be deallocated.
  */
-void destroy_cmd(struct Cmd* cmd)
+void destroy_cmd(struct Cmd *cmd)
 {
     destroy_arg_list(&cmd->args);
     destroy_string(&cmd->target_program);
+}
+
+/**
+ * Executes the command.
+ *
+ * @param cmd the command to execute.
+ *
+ * @return the status code
+ */
+int execute_cmd(struct Cmd *cmd)
+{
+    // Convert the struct arguments to actual char arrays
+    char **argv = to_argv(&cmd->args);
+
+    int res = execv(cmd->target_program.contents, argv);
+    free(argv);
+
+    return res;
 }

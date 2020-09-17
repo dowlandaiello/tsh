@@ -1,3 +1,6 @@
+test_binaries = $(subst .c, , $(wildcard tests/*))
+example_binaries = $(subst .c, , $(wildcard examples/*.c))
+
 # Builds the tiny shell
 tsh: tsh.o
 	cc tsh.o -o tsh
@@ -11,6 +14,14 @@ tests/%:
 	cc -Isrc $(shell find src -name *.c) $@.c -o $@ && $@ && rm $@
 	@echo ""; echo "DONE"; echo ""
 
+# Builds an individual example file
+examples/%:
+	cc $@.c -o $@
+
+# Build all the example programs
+.PHONY: examples
+examples: $(example_binaries)
+
 # Debugs the specified file
 .PHONY: debug
 debug:
@@ -18,7 +29,7 @@ debug:
 
 # Runs all unit tests
 .PHONY: test
-test: $(subst .c, , $(wildcard tests/*))
+test: examples $(test_binaries)
 
 .PHONY: format
 format:
@@ -27,7 +38,7 @@ format:
 # Removes all object files, and deletes the built shell
 .PHONY: clean
 clean:
-	rm *.o tsh debug
+	rm $(example_binaries) *.o tsh debug -f
 
 .PHONY: all
-all: tsh test
+all: format tsh test

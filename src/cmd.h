@@ -6,8 +6,7 @@
 /**
  * A list of arguments passed to a program via the tsh command line.
  */
-struct ArgList
-{
+struct ArgList {
     /* The number of arguments that may be stored in the argument list */
     long capacity;
 
@@ -15,7 +14,7 @@ struct ArgList
     long length;
 
     /* The argumments stored in the list of arguments */
-    struct String* args;
+    struct String *args;
 };
 
 /**
@@ -29,20 +28,26 @@ struct ArgList make_arg_list();
  * @param args the argument list to which the argument should be pushed
  * @param arg the argument that should be pushed to the argument list
  */
-void push_arg_arg_list(struct ArgList* args, struct String arg);
+void push_arg_arg_list(struct ArgList *args, struct String arg);
+
+/**
+ * Converts a list of arguments to an array of char pointers.
+ *
+ * @param args the argument list to convert
+ */
+char **to_argv(struct ArgList *args);
 
 /**
  * Deallocates the argument list.
  *
  * @param args the argument list that should be deallocated
  */
-void destroy_arg_list(struct ArgList* args);
+void destroy_arg_list(struct ArgList *args);
 
 /**
  * A tsh command passed via the command line.
  */
-struct Cmd
-{
+struct Cmd {
     /* The program targeted by the command */
     struct String target_program;
 
@@ -57,11 +62,20 @@ struct Cmd
  *
  * @return the parsed command
  */
-struct Cmd parse_cmd(struct String* cmd);
+struct Cmd parse_cmd(struct String *cmd);
 
 /**
  * Deallocates the command.
  *
  * @param cmd the command to be deallocated.
  */
-void destroy_cmd(struct Cmd* cmd);
+void destroy_cmd(struct Cmd *cmd);
+
+/**
+ * Executes the command.
+ *
+ * @param cmd the command to execute.
+ *
+ * @return the status code
+ */
+int execute_cmd(struct Cmd *cmd);
