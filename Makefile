@@ -1,8 +1,8 @@
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 
-test_binaries = $(subst .c, , $(wildcard tests/*))
-example_binaries = $(subst .c, , $(wildcard examples/*.c))
-source_files = $(shell find src -name *.c ! -path 'src/main.c')
+test_binaries := $(subst .c, , $(wildcard tests/*))
+example_binaries := $(subst .c, , $(wildcard examples/*.c))
+source_files := $(shell find src -name *.c ! -path 'src/main.c')
 
 # Builds the tiny shell
 tsh: $(source_files) src/main.c
@@ -23,7 +23,7 @@ examples/%:
 # Install to path
 .PHONY: install
 install: tsh
-	cp tsh /usr/bin
+	sudo cp tsh /usr/local/bin
 
 # Build all the example programs
 .PHONY: examples
