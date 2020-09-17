@@ -8,7 +8,7 @@ tsh.o:
 # Builds and runs individual test files
 tests/%:
 	@echo "RUNNING TEST " $@
-	cc -Isrc $(shell find src/ -name *.c) $@.c -o $@ && $@ && rm $@
+	cc -Isrc $(shell find src -name *.c) $@.c -o $@ && $@ && rm $@
 	@echo "DONE"; echo ""
 
 # Runs all unit tests

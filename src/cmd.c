@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -67,7 +68,7 @@ struct Cmd parse_cmd(struct String* cmd)
 {
     long target_len = 0;
 
-    for (; cmd->contents[target_len] != ' ' && target_len < cmd->length; target_len++)
+    for (; cmd->contents[target_len] != ' ' && cmd->contents[target_len] != '\0' && target_len < cmd->length; target_len++)
         ;
 
     // Fetch the target of the command string (e.g., "target arg1 arg2")
@@ -77,19 +78,23 @@ struct Cmd parse_cmd(struct String* cmd)
     struct Cmd parsed_cmd = { derive_string(target), make_arg_list() };
     struct String current_arg_buff = make_string(8);
 
-    for (int i = 0; target_len < cmd->length; target_len++) {
+    for (; target_len < cmd->length; target_len++) {
         char curr = cmd->contents[target_len];
 
         // Once the next argument is reached, clear the arg buffer and store
         // the old one in the parsed command
         if (curr == ' ') {
-            push_arg_arg_list(&parsed_cmd.args, current_arg_buff);
-            current_arg_buff = make_string(8);
-
-            i++;
+            if (current_arg_buff.length > 0) {
+                push_arg_arg_list(&parsed_cmd.args, current_arg_buff);
+                current_arg_buff = make_string(8);
+            }
 
             continue;
         }
+
+        // Once a null char is found, we're done!
+        if (curr == '\0')
+            break;
 
         push_string(&current_arg_buff, curr);
     }
