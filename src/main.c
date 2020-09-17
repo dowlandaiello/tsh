@@ -4,7 +4,7 @@
 
 void show_prompt()
 {
-    printf("> ");
+    printf("λ ");
 
     struct String input = make_string(8);
 
