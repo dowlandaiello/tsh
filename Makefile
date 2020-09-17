@@ -8,7 +8,7 @@ tsh: tsh.o
 	cc tsh.o -o tsh
 
 tsh.o:
-	cc -c src/main.c -o tsh.o
+	cc -Isrc src/main.c -c -o tsh.o
 
 # Builds and runs individual test files
 tests/%:
@@ -46,6 +46,7 @@ format:
 .PHONY: clean
 clean:
 	rm -f $(example_binaries) *.o tsh debug
+	rm -rf *.dSYM
 
 .PHONY: all
 all: format tsh test

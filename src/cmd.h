@@ -80,4 +80,4 @@ void destroy_cmd(struct Cmd *cmd);
  *
  * @return the status code
  */
-void execute_cmd(struct Cmd *cmd);
+int execute_cmd(struct Cmd *cmd);

@@ -154,10 +154,16 @@ void destroy_cmd(struct Cmd *cmd)
  *
  * @param cmd the command to execute.
  *
- * @return the status code
+ * @return whether or not the shell should terminate
  */
-void execute_cmd(struct Cmd *cmd)
+int execute_cmd(struct Cmd *cmd)
 {
+    char *raw_target = cmd->target_program.contents;
+
+    if (strcmp(raw_target, "exit") == 0) {
+        return 1;
+    }
+
     // Convert the struct arguments to actual char arrays
     char **argv = to_argv(&cmd->args);
 
