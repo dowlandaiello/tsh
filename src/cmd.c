@@ -97,6 +97,7 @@ struct Cmd parse_cmd(struct String* cmd)
         if (curr == '\0' || curr == '\n') {
             if (current_arg_buff.length > 0)
                 push_arg_arg_list(&parsed_cmd.args, current_arg_buff);
+
             break;
         }
 
