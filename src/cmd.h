@@ -1,83 +1,20 @@
-#include "common/alloc.h"
-
-/* As defined in Bash on my system */
-#define DEFAULT_ARGLIST_CAPACITY 9
-
 /**
- * A list of arguments passed to a program via the tsh command line.
+ * A status code of an executed command.
  */
-struct ArgList {
-    /* The number of arguments that may be stored in the argument list */
-    long capacity;
-
-    /* The number of arguments currently stored in the argument list */
-    long length;
-
-    /* The argumments stored in the list of arguments */
-    struct String *args;
+enum Status {
+	OK, ERR,
 };
 
 /**
- * Allocates a new argument list.
+ * The result of a command's execution.
  */
-struct ArgList make_arg_list();
-
-/**
- * Pushes a new argument to the argument list.
- *
- * @param args the argument list to which the argument should be pushed
- * @param arg the argument that should be pushed to the argument list
- */
-void push_arg_arg_list(struct ArgList *args, struct String arg);
-
-/**
- * Converts a list of arguments to an array of char pointers.
- *
- * @param args the argument list to convert
- *
- * @return the arguments
- */
-char **to_argv(struct ArgList *args);
-
-/**
- * Deallocates the argument list.
- *
- * @param args the argument list that should be deallocated
- */
-void destroy_arg_list(struct ArgList *args);
-
-/**
- * A tsh command passed via the command line.
- */
-struct Cmd {
-    /* The program targeted by the command */
-    struct String target_program;
-
-    /* Arguments to the program */
-    struct ArgList args;
+struct Res {
+	/* The status code */
+	enum Status status;	
 };
 
 /**
- * Parses a command from the given string input.
- *
- * @param cmd the string to parse into a command.
- *
- * @return the parsed command
+ * Executes the given command by forking and waiting for the command to finish
+ * executing.
  */
-struct Cmd parse_cmd(struct String *cmd);
-
-/**
- * Deallocates the command.
- *
- * @param cmd the command to be deallocated.
- */
-void destroy_cmd(struct Cmd *cmd);
-
-/**
- * Executes the command.
- *
- * @param cmd the command to execute.
- *
- * @return the status code
- */
-int execute_cmd(struct Cmd *cmd);
+struct Res exec(char *cmd, char *args);

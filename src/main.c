@@ -1,44 +1,25 @@
+#include <stdlib.h>
 #include <stdio.h>
-
-#include "cmd.h"
-
-void show_prompt()
-{
-    printf("λ ");
-
-    struct String input = make_string(8);
-
-    for (int c = getchar(); c != '\n'; c = getchar()) {
-        if (c == EOF) {
-            destroy_string(&input);
-            printf("\n");
-
-            return;
-        }
-
-        push_string(&input, c);
-    }
-
-    struct Cmd cmd = parse_cmd(&input);
-    int ret_status = execute_cmd(&cmd);
-
-    if (ret_status == -1)
-        return show_prompt();
-
-    destroy_cmd(&cmd);
-
-    if (ret_status == 1)
-        return;
-
-    show_prompt();
-}
+#include <readline/readline.h>
+#include <readline/history.h>
 
 int main()
 {
-    extern struct ArgList exported_variables;
-    exported_variables = make_arg_list();
+    // Let readline handle path completion
+    rl_bind_key('\t', rl_complete);
 
-    show_prompt();
+    for (;;) {
+        char *input = readline("λ ");
+
+        // "exit" or ^d means the shell should stop
+        if (!input || strcmp(input, "exit") == 0)
+            break;
+        
+        // Thanks, readline
+        add_history(input);
+
+        free(input);
+    }
 
     return 0;
 }

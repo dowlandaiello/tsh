@@ -6,19 +6,19 @@ source_files := $(shell find src -name *.c ! -path 'src/main.c')
 
 # Builds the tiny shell
 tsh: $(source_files) src/main.c
-	cc -Isrc $(source_files) src/main.c -o tsh
+	cc -lreadline -Isrc $(source_files) src/main.c -o tsh
 
 src/%:
 
 # Builds and runs individual test files
 tests/%:
 	@echo "RUNNING TEST " $@; echo ""
-	cc -Isrc $(source_files) $@.c -o $@ && $@ && rm $@
+	cc -lreadline -Isrc $(source_files) $@.c -o $@ && $@ && rm $@
 	@echo ""; echo "DONE"; echo ""
 
 # Builds an individual example file
 examples/%:
-	cc $@.c -o $@
+	cc -lreadline $@.c -o $@
 
 # Install to path
 .PHONY: install
@@ -36,7 +36,7 @@ clean_examples:
 # Debugs the specified file
 .PHONY: debug
 debug: examples
-	cc -g -Isrc $(shell find src -name *.c) $(f) -o debug && lldb debug && rm debug
+	cc -lreadline -g -Isrc $(shell find src -name *.c) $(f) -o debug && lldb debug && rm debug
 	@$(MAKE) -f $(THIS_FILE) clean_examples
 
 # Runs all unit tests
