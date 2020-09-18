@@ -35,6 +35,9 @@ void show_prompt()
 
 int main()
 {
+    extern struct ArgList exported_variables;
+    exported_variables = make_arg_list();
+
     show_prompt();
 
     return 0;

@@ -7,6 +7,8 @@
 
 #include "cmd.h"
 
+struct ArgList exported_variables;
+
 /**
  * Allocates a new argument list.
  */
@@ -152,6 +154,19 @@ void destroy_cmd(struct Cmd *cmd)
 {
     destroy_arg_list(&cmd->args);
     destroy_string(&cmd->target_program);
+}
+
+/**
+ * Resolves a full path to the program targeted by the command according to
+ * the PATH variable.
+ *
+ * @param cmd the command whose target should be resolved
+ *
+ * @return a full path to the binary
+ */
+char *resolve_PATH(struct Cmd *cmd)
+{
+
 }
 
 /**
