@@ -2,6 +2,7 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "exten/log.h"
 #include "cmd.h"
