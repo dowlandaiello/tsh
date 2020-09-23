@@ -1,4 +1,9 @@
+#include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -34,13 +39,16 @@ void destroy_cmd(Cmd *cmd)
  */
 Res exec(struct Cmd *cmd)
 {
-    // -1 equals UH OH STINKY
-    int *status = malloc(sizeof(int));
+    // Anything but zero equals UH OH STINKY
+    int err_shmid = shmget(IPC_PRIVATE, sizeof(unsigned int), IPC_CREAT | 0600);
 
     // Spawn a child and wait for the cmd to execute
     if (fork() == 0) {
         if (execv(cmd->target, cmd->argv)) {
-            *status = -1;
+            unsigned int *status = shmat(err_shmid, NULL, 0);
+
+            *status = errno;
+            shmdt(status);
 
             exit(0);
         }
@@ -50,8 +58,11 @@ Res exec(struct Cmd *cmd)
 
     // If the child process didn't exit successfully, we will know in main to
     // log ERRNO
+    unsigned int *status = shmat(err_shmid, NULL, 0);
     Res res = { *status };
-    free(status);
+
+    shmdt(status);
+    shmctl(err_shmid, IPC_RMID, NULL);
 
     return res;
 }

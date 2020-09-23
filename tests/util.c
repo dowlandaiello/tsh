@@ -1,6 +1,6 @@
 #include <assert.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "util/str.h"
 
@@ -13,7 +13,7 @@ int main()
 
     for (int i = 0; i < 4; i++)
         printf("%s\n", parts[i]);
-        //assert(strcmp(test_parts[i], parts[i]));
+    // assert(strcmp(test_parts[i], parts[i]));
 
     return 0;
 }

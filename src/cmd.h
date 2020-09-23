@@ -1,17 +1,9 @@
 /**
- * A status code of an executed command.
- */
-enum Status {
-    OK,
-    ERR,
-};
-
-/**
  * The result of a command's execution.
  */
 typedef struct Res {
     /* The status code */
-    enum Status status;
+    unsigned int err;
 } Res;
 
 typedef struct Cmd {

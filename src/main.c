@@ -3,6 +3,7 @@
 #include <readline/readline.h>
 #include <stdlib.h>
 
+#include "exten/log.h"
 #include "cmd.h"
 
 int main()
@@ -20,8 +21,11 @@ int main()
         // Thanks, readline
         add_history(input);
 
-        struct Cmd cmd = parse_cmd(input);
-        struct Res res = exec(&cmd);
+        Cmd cmd = parse_cmd(input);
+        Res res = exec(&cmd);
+
+        if (res.err)
+            log_err(res.err);
 
         free(input);
     }
