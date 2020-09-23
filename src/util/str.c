@@ -15,14 +15,22 @@
  */
 char **split(char *str, char *delim)
 {
+    /*
+     * Dynamically allocate more space if more parts are found in the string
+     * than expected. 8 is used as the initial capacity of the buffer.
+     */
     int capacity = INITIAL_SUBSTR_PARTS_ALLOCATED;
-
     char **parts = malloc(sizeof(char *) * INITIAL_SUBSTR_PARTS_ALLOCATED);
-    char *curr_part = strtok(str, " ");
 
-    for (int i = 0, j = 0; str[i] != '\0' && curr_part != NULL;
-         curr_part = strtok(str + i, " "), i += strlen(curr_part), j++) {
+    // Get the next token in the string before each occurrence of the delimiter
+    char *curr_part = strtok(str, delim);
+
+    // Keep getting tokens and storing them in parts, increasing the capcaity
+    // if necessary, until NULL or '\0' is hit.
+    for (int j = 0; *str != '\0' && curr_part != NULL;
+         str += strlen(curr_part = strtok(str, " "))) {
         if (j >= capacity) {
+            // Realocate a new buffer with double the capacity
             char **new_parts = malloc(sizeof(char *) * capacity * 2);
             memcpy(new_parts, parts, capacity);
 
@@ -32,7 +40,7 @@ char **split(char *str, char *delim)
             capacity *= 2;
         }
 
-        parts[j] = curr_part;
+        parts[j++] = curr_part;
     }
 
     return parts;

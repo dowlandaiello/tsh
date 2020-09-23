@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #include "cmd.h"
-#include "util/string.h"
+#include "util/str.h"
 
 /**
  * Parses a command from the provided string input.
@@ -11,24 +12,46 @@
  *
  * @return the parsed command
  */
-Cmd parse_cmd(char *input){ Cmd cmd = }
+Cmd parse_cmd(char *input)
+{
+    char **cmd_parts = split(input, " ");
+    return (struct Cmd) {cmd_parts[0], cmd_parts};
+}
+
+/**
+ * Deallocates the underlying string command of the given command struct.
+ *
+ * @param cmd the command to deallocate
+ */
+void destroy_cmd(Cmd *cmd)
+{
+    free(cmd->argv);
+}
 
 /**
  * Executes the given command by forking and waiting for the command to finish
- * executing.
+ * executing. Does not free the command.
  */
-Res exec(char *cmd, char *args)
+Res exec(struct Cmd *cmd)
 {
-    int argc = 0;
-
-    for (int i = 0; args[i] != '\0'; i++)
-        if (args[i] == ' ')
-            argc++;
-
-    char **argv = malloc(sizeof(char) * (argc + 1));
+    // -1 equals UH OH STINKY
+    int *status = malloc(sizeof(int));
 
     // Spawn a child and wait for the cmd to execute
     if (fork() == 0) {
-        execl(cmd, args);
+        if(execv(cmd->target, cmd->argv)) {
+            *status = -1;
+
+            exit(0);
+        }
     }
+
+    wait(NULL);
+
+    // If the child process didn't exit successfully, we will know in main to
+    // log ERRNO
+    Res res = {*status};
+    free(status);
+
+    return res;
 }

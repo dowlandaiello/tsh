@@ -32,6 +32,13 @@ typedef struct Cmd {
 Cmd parse_cmd(char *input);
 
 /**
+ * Deallocates the underlying string command of the given command struct.
+ *
+ * @param cmd the command to deallocate
+ */
+void destroy_cmd(Cmd *cmd);
+
+/**
  * Executes the given command by forking and waiting for the command to finish
  * executing.
  *
@@ -39,4 +46,4 @@ Cmd parse_cmd(char *input);
  *
  * @return the status code of the operation
  */
-Res exec(struct Cmd *cmd);
+Res exec(Cmd *cmd);
