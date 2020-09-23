@@ -6,6 +6,23 @@
 #define INITIAL_SUBSTR_PARTS_ALLOCATED 8
 
 /**
+ * Expands the given buffer if necessary.
+ */
+void expand(char ***parts, const int i, int *capacity)
+{
+    if (i < *capacity)
+        return;
+
+    char **new = malloc(sizeof(char *) * *capacity * 2);
+    memcpy(new, *parts, *capacity);
+
+    free(*parts);
+    *parts = new;
+
+    *capacity *= 2;
+}
+
+/**
  * Splits the given string into an array of strings on each occurrence of the
  * delimiter.
  *
@@ -20,7 +37,7 @@ char **split(char *str, char *delim)
      * Dynamically allocate more space if more parts are found in the string
      * than expected. 8 is used as the initial capacity of the buffer.
      */
-    int capacity = INITIAL_SUBSTR_PARTS_ALLOCATED;
+    int capacity = INITIAL_SUBSTR_PARTS_ALLOCATED, j;
     char **parts = malloc(sizeof(char *) * INITIAL_SUBSTR_PARTS_ALLOCATED);
 
     // Get the next token in the string before each occurrence of the delimiter
@@ -29,21 +46,15 @@ char **split(char *str, char *delim)
 
     // Keep getting tokens and storing them in parts, increasing the capcaity
     // if necessary, until NULL or '\0' is hit.
-    for (int j = 0; curr_part != NULL;
+    for (j = 0; curr_part != NULL;
          curr_part = strtok_r(NULL, delim, &saveptr)) {
-        if (j >= capacity) {
-            // Realocate a new buffer with double the capacity
-            char **new_parts = malloc(sizeof(char *) * capacity * 2);
-            memcpy(new_parts, parts, capacity);
-
-            free(parts);
-            parts = new_parts;
-
-            capacity *= 2;
-        }
+        expand(&parts, j, &capacity);
 
         parts[j++] = curr_part;
     }
+
+    expand(&parts, j, &capacity);
+    parts[j] = NULL;
 
     return parts;
 }

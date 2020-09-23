@@ -5,7 +5,10 @@
 #include <string.h>
 
 #include "exten/log.h"
+#include "exten/ps1.h"
 #include "cmd.h"
+
+extern char ps1[];
 
 int main()
 {
@@ -13,7 +16,7 @@ int main()
     rl_bind_key('\t', rl_complete);
 
     for (;;) {
-        char *input = readline("λ ");
+        char *input = readline(ps1);
 
         // "exit" or ^d means the shell should stop
         if (!input || strcmp(input, "exit") == 0)
