@@ -1,6 +1,6 @@
 #include <stdlib.h>
-#include <unistd.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
 #include "cmd.h"
 #include "util/str.h"
@@ -15,7 +15,7 @@
 Cmd parse_cmd(char *input)
 {
     char **cmd_parts = split(input, " ");
-    return (struct Cmd) {cmd_parts[0], cmd_parts};
+    return (struct Cmd){ cmd_parts[0], cmd_parts };
 }
 
 /**
@@ -39,7 +39,7 @@ Res exec(struct Cmd *cmd)
 
     // Spawn a child and wait for the cmd to execute
     if (fork() == 0) {
-        if(execv(cmd->target, cmd->argv)) {
+        if (execv(cmd->target, cmd->argv)) {
             *status = -1;
 
             exit(0);
@@ -50,7 +50,7 @@ Res exec(struct Cmd *cmd)
 
     // If the child process didn't exit successfully, we will know in main to
     // log ERRNO
-    Res res = {*status};
+    Res res = { *status };
     free(status);
 
     return res;

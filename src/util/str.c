@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdio.h>
 
 #include "str.h"
 
@@ -23,12 +24,13 @@ char **split(char *str, char *delim)
     char **parts = malloc(sizeof(char *) * INITIAL_SUBSTR_PARTS_ALLOCATED);
 
     // Get the next token in the string before each occurrence of the delimiter
-    char *curr_part = strtok(str, delim);
+    char *saveptr, *curr_part;
+    curr_part = strtok_r(str, delim, &saveptr);
 
     // Keep getting tokens and storing them in parts, increasing the capcaity
     // if necessary, until NULL or '\0' is hit.
-    for (int j = 0; *str != '\0' && curr_part != NULL;
-         str += strlen(curr_part = strtok(str, " "))) {
+    for (int j = 0; curr_part != NULL;
+         curr_part = strtok_r(NULL, delim, &saveptr)) {
         if (j >= capacity) {
             // Realocate a new buffer with double the capacity
             char **new_parts = malloc(sizeof(char *) * capacity * 2);
