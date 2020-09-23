@@ -1,7 +1,9 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <readline/readline.h>
 #include <readline/history.h>
+#include <readline/readline.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "cmd.h"
 
 int main()
 {
@@ -14,9 +16,12 @@ int main()
         // "exit" or ^d means the shell should stop
         if (!input || strcmp(input, "exit") == 0)
             break;
-        
+
         // Thanks, readline
         add_history(input);
+
+        struct Cmd cmd = parse_cmd(input);
+        struct Res res = exec(&cmd);
 
         free(input);
     }

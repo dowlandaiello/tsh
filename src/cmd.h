@@ -2,19 +2,41 @@
  * A status code of an executed command.
  */
 enum Status {
-	OK, ERR,
+    OK,
+    ERR,
 };
 
 /**
  * The result of a command's execution.
  */
-struct Res {
-	/* The status code */
-	enum Status status;	
-};
+typedef struct Res {
+    /* The status code */
+    enum Status status;
+} Res;
+
+typedef struct Cmd {
+    /* The target of the cmd */
+    char *target;
+
+    /* Arguments for the target */
+    char **argv;
+} Cmd;
+
+/**
+ * Parses a command from the provided string input.
+ *
+ * @param input the string that should be parsed into a command
+ *
+ * @return the parsed command
+ */
+Cmd parse_cmd(char *input);
 
 /**
  * Executes the given command by forking and waiting for the command to finish
  * executing.
+ *
+ * @param cmd the command to execute
+ *
+ * @return the status code of the operation
  */
-struct Res exec(char *cmd, char *args);
+Res exec(struct Cmd *cmd);
