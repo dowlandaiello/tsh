@@ -11,7 +11,7 @@
  */
 HashMap make_hashmap()
 {
-    return (HashMap) {};
+    return (HashMap){};
 }
 
 /**
@@ -97,8 +97,8 @@ void put_hashmap(HashMap *map, char *key, char *value)
 
     // If an entry exists in the bucket, make it the next
     if (*bkt_head_ptr != NULL) {
-        new_entry->next = *bkt_head_ptr;    
-    } 
+        new_entry->next = *bkt_head_ptr;
+    }
 
     // Put the new entry in the bucket
     *bkt_head_ptr = new_entry;

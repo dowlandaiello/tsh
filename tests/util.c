@@ -16,7 +16,7 @@ int main()
     for (int i = 0; i < 4; i++)
         printf("%s\n", parts[i]);
     // assert(strcmp(test_parts[i], parts[i]));
-    
+
     HashMap map = make_hashmap();
 
     put_hashmap(&map, "a", "1");

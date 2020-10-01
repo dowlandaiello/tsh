@@ -4,35 +4,35 @@
  * An entry in a hashmap bucket.
  */
 typedef struct Entry {
-	/* The key of the entry */
-	char *key;
+    /* The key of the entry */
+    char *key;
 
-	/* The value of the entry */
-	char *value;
+    /* The value of the entry */
+    char *value;
 
-	/* The next entry */
-	struct Entry *next;
+    /* The next entry */
+    struct Entry *next;
 } Entry;
 
 /**
  * A bucket in a hashmap.
  */
 typedef struct Bucket {
-	/* The next bucket */
-	Entry *head;
+    /* The next bucket */
+    Entry *head;
 } Bucket;
 
 /**
  * A hashmap.
  */
 typedef struct HashMap {
-	/* The buckets stored in the hashmap */
-	Bucket buckets[NUM_BUCKETS];
+    /* The buckets stored in the hashmap */
+    Bucket buckets[NUM_BUCKETS];
 } HashMap;
 
 /**
  * Returns a new stack-allocated HashMap.
- * 
+ *
  * @return the new hashmap
  */
 HashMap make_hashmap();

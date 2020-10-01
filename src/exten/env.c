@@ -11,7 +11,7 @@ Env env;
 /* Initializes the global environment. */
 void init_env()
 {
-    env = (Env) {make_hashmap()};
+    env = (Env){ make_hashmap() };
 }
 
 /* Loads the environment from a .env file in the immediate directory */
@@ -19,7 +19,7 @@ int load_env()
 {
     FILE *dotenv = fopen(".env", "r");
     if (dotenv == NULL)
-       return 0; 
+        return 0;
 
     char *line = malloc(sizeof(char) * INITIAL_MAX_LINE_LEN);
     size_t buff_size;
