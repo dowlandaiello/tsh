@@ -1,4 +1,7 @@
-#include "ps1.h"
+#include "util/color.h"
+
+/* The ps1 */
+extern char *ps1_seq;
 
 /* Characters prepended to the ps1_seq (e.g., color data). */
 char *prefix;

@@ -6,11 +6,19 @@
 
 #include "exten/log.h"
 #include "exten/ps1.h"
+#include "exten/env.h"
 #include "cmd.h"
+
+/* The ps1 */
+extern char *ps1_seq;
 
 int main()
 {
     set_ps1("λ ");
+
+    // Load environment variables from a .env file (if it exists)
+    init_env();
+    load_env();
 
     // Let readline handle path completion
     rl_bind_key('\t', rl_complete);

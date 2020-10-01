@@ -61,6 +61,7 @@ int contains_key_hashmap(HashMap *map, char *key);
 /**
  * Inserts a value into the hashmap under the corresponding key.
  *
+ * @param map the HashMap from which the entry should be pulled
  * @param key the key of the entry
  * @param value the value of the entry
  */
