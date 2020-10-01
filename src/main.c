@@ -9,9 +9,6 @@
 #include "exten/env.h"
 #include "cmd.h"
 
-/* The ps1 */
-extern char *ps1_seq;
-
 int main()
 {
     set_ps1("λ ");

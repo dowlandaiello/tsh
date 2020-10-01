@@ -1,7 +1,7 @@
 #include "util/color.h"
 
 /* A sequence of characters printed before input. */
-char *ps1_seq;
+extern char *ps1_seq;
 
 /**
  * Sets the ps1 to the given string.
