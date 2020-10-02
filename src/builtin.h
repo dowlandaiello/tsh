@@ -9,8 +9,22 @@
  */
 Res cd(Cmd *cmd);
 
+/**
+ * Exports an environment variable to the child process.
+ *
+ * @param cmd the command specifying what to export
+ *
+ * @return the status code
+ */
+Res xport(Cmd *cmd);
+
+
 /* All of the available builtin commands */
-Res (*const BUILTIN_CMDS[])(Cmd*) = {&cd};
+typedef Res (*BuiltinCmd)(Cmd*);
+extern const BuiltinCmd BUILTIN_CMDS[];
+
+/* The names of the builtin commands */
+extern const char *BUILTIN_CMD_NAMES[];
 
 /**
  * Attempts to execute the given built-in command.

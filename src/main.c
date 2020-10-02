@@ -7,7 +7,7 @@
 #include "exten/log.h"
 #include "exten/ps1.h"
 #include "exten/env.h"
-#include "cmd.h"
+#include "builtin.h"
 
 int main()
 {
@@ -33,7 +33,12 @@ int main()
         Cmd cmd = parse_cmd(input);
         Res res = exec(&cmd);
 
-        if (res.err)
+        if (res.err == 2)
+            res = execute_builtin(&cmd);
+
+        if (res.err_msg != NULL)
+            put_shell_message(stderr, res.err_msg);
+        else if (res.err)
             log_err(res.err);
 
         free(input);

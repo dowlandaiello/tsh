@@ -3,7 +3,10 @@
  */
 typedef struct Res {
     /* The status code */
-    unsigned int err;
+    int err;
+
+    /* A custom error message */
+    char *err_msg;
 } Res;
 
 typedef struct Cmd {
