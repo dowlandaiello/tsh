@@ -13,10 +13,24 @@
 #define UNRECOGNIZED_CMD_ERR "invalid command"
 
 /* All of the available builtin commands */
-const BuiltinCmd BUILTIN_CMDS[] = { NULL, NULL, cd, NULL, xport };
+const BuiltinCmd BUILTIN_CMDS[] = { NULL, NULL, cd, NULL, xport, NULL, NULL, pphappy};
 
 /* The names of the builtin commands */
-const char *BUILTIN_CMD_NAMES[] = { "", "", "cd", "", "export" };
+const char *BUILTIN_CMD_NAMES[] = { "", "", "cd", "", "export", "", "", "hi"};
+
+/**
+ * WidepeepoHappy
+ *
+ * @param cmd the cmd
+ *
+ * @return the status code
+ */
+Res pphappy(Cmd *cmd)
+{
+    printf("(っ◕‿◕)っ Have a great day! <3\n");
+
+    return (Res){0, (InternalStatus){OK}};
+}
 
 /**
  * Changes the current directory in accordance with the provided command.
