@@ -59,9 +59,11 @@ char **dump_env()
 
     // Dump data in each of the hashmap's buckets
     for (int i = 0; i < NUM_BUCKETS; i++) {
-        for (Entry *curr = env.variables.buckets[i].head; curr != NULL; curr = curr->next) {
+        for (Entry *curr = env.variables.buckets[i].head; curr != NULL;
+             curr = curr->next) {
             // Combine the key and value in the entry in the format of KEY=VALUE
-            char *combined_entry = malloc(sizeof(char) * (strlen(curr->key) + strlen(curr->value) + 2));
+            char *combined_entry = malloc(
+                sizeof(char) * (strlen(curr->key) + strlen(curr->value) + 2));
             sprintf(combined_entry, "%s=%s", curr->key, curr->value);
 
             vars[j++] = combined_entry;

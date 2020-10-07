@@ -70,7 +70,7 @@ Res exec(struct Cmd *cmd)
 
 /**
  * Executes the given command by evaluating the PATH.
- * 
+ *
  * @param cmd the command to execute
  *
  * @return the status code of the operation

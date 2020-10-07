@@ -33,7 +33,8 @@ void recache_path()
     char *e_val = malloc(sizeof e);
     strcpy(e_val, e->value);
 
-    for (char *token = strtok(e_val, ":"); token != NULL; token = strtok(NULL, ":")) {
+    for (char *token = strtok(e_val, ":"); token != NULL;
+         token = strtok(NULL, ":")) {
         // Iterate through all the files in the PATH dir
         DIR *dr = opendir(token);
         if (dr == NULL)
@@ -43,12 +44,16 @@ void recache_path()
         size_t parent_path_len = strlen(token);
 
         for (struct dirent *de = readdir(dr); de != NULL; de = readdir(dr)) {
-            // Construct a fully qualified directory for the node in the PATH dir
-            char *qualified_name = malloc(sizeof(char) * (parent_path_len + strlen(de->d_name) + 2));
+            // Construct a fully qualified directory for the node in the PATH
+            // dir
+            char *qualified_name = malloc(
+                sizeof(char) * (parent_path_len + strlen(de->d_name) + 2));
             sprintf(qualified_name, "%s/%s", token, de->d_name);
 
             // Register an entry in the PATH for the actual binary
-            put_hashmap(&env.path, &qualified_name[parent_path_len + 1], qualified_name);
+            put_hashmap(&env.path,
+                        &qualified_name[parent_path_len + 1],
+                        qualified_name);
         }
 
         closedir(dr);
