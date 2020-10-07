@@ -12,3 +12,10 @@ A tiny shell written in C.
 No reason in particular. This was just a small project I did to learn about
 the linux system call interface. I might actually use this myself if I add
 enough features. ¯\\\_(ツ)\_/¯
+
+## Supported Features
+
+- [x] Running targets
+- [x] Environment variables
+- [x] PATH resolution
+- [x] Some builtin commands
