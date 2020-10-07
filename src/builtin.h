@@ -10,6 +10,15 @@
 Res pphappy(Cmd *cmd);
 
 /**
+ * A command used to report a bug.
+ *
+ * @param cmd the cmd
+ *
+ * @return the status code
+ */
+Res bugreport(Cmd *cmd);
+
+/**
  * Changes the current directory in accordance with the provided command.
  *
  * @param cmd the command specifying where to go
