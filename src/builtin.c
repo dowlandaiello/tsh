@@ -13,10 +13,12 @@
 #define UNRECOGNIZED_CMD_ERR "invalid command"
 
 /* All of the available builtin commands */
-const BuiltinCmd BUILTIN_CMDS[] = { NULL, bugreport, cd, NULL, xport, NULL, NULL, pphappy};
+const BuiltinCmd BUILTIN_CMDS[] = { NULL,  bugreport, cd,   NULL,
+                                    xport, NULL,      NULL, pphappy };
 
 /* The names of the builtin commands */
-const char *BUILTIN_CMD_NAMES[] = { "", "bugreport", "cd", "", "export", "", "", "hi"};
+const char *BUILTIN_CMD_NAMES[] = { "",       "bugreport", "cd", "",
+                                    "export", "",          "",   "hi" };
 
 /**
  * A command used to report a bug.
@@ -27,9 +29,10 @@ const char *BUILTIN_CMD_NAMES[] = { "", "bugreport", "cd", "", "export", "", "",
  */
 Res bugreport(Cmd *cmd)
 {
-    printf("🕵️  Nice work! Any and all bug reports are appreciated. File one here: https://github.com/dowlandaiello/tsh/issues.\n");
+    printf("🕵️  Nice work! Any and all bug reports are appreciated. File "
+           "one here: https://github.com/dowlandaiello/tsh/issues.\n");
 
-    return (Res){0, (InternalStatus){OK}};
+    return (Res){ 0, (InternalStatus){ OK } };
 }
 
 /**
@@ -43,7 +46,7 @@ Res pphappy(Cmd *cmd)
 {
     printf("(っ◕‿◕)っ Have a great day! <3\n");
 
-    return (Res){0, (InternalStatus){OK}};
+    return (Res){ 0, (InternalStatus){ OK } };
 }
 
 /**
