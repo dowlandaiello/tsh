@@ -13,10 +13,38 @@
 #define UNRECOGNIZED_CMD_ERR "invalid command"
 
 /* All of the available builtin commands */
-const BuiltinCmd BUILTIN_CMDS[] = { NULL, NULL, cd, NULL, xport };
+const BuiltinCmd BUILTIN_CMDS[] = { NULL, bugreport, cd, NULL, xport, NULL, NULL, pphappy};
 
 /* The names of the builtin commands */
-const char *BUILTIN_CMD_NAMES[] = { "", "", "cd", "", "export" };
+const char *BUILTIN_CMD_NAMES[] = { "", "bugreport", "cd", "", "export", "", "", "hi"};
+
+/**
+ * A command used to report a bug.
+ *
+ * @param cmd the cmd
+ *
+ * @return the status code
+ */
+Res bugreport(Cmd *cmd)
+{
+    printf("🕵️  Nice work! Any and all bug reports are appreciated. File one here: https://github.com/dowlandaiello/tsh/issues.\n");
+
+    return (Res){0, (InternalStatus){OK}};
+}
+
+/**
+ * WidepeepoHappy
+ *
+ * @param cmd the cmd
+ *
+ * @return the status code
+ */
+Res pphappy(Cmd *cmd)
+{
+    printf("(っ◕‿◕)っ Have a great day! <3\n");
+
+    return (Res){0, (InternalStatus){OK}};
+}
 
 /**
  * Changes the current directory in accordance with the provided command.
