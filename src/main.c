@@ -33,7 +33,7 @@ int main()
         Cmd cmd = parse_cmd(input);
         Res res = exec(&cmd);
 
-        if (res.err == 2)
+        if (res.err == 2 && (res = exec_path(&cmd)).err == 2)
             res = execute_builtin(&cmd);
 
         if (res.err_msg != NULL)
@@ -41,7 +41,10 @@ int main()
         else if (res.err)
             log_err(res.err);
 
-        free(input);
+        // Unless we are storing the input for an environment variable, clear
+        // the input
+        if (res.stat != NO_DEALLOC)
+            free(input);
     }
 
     return 0;

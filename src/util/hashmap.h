@@ -1,4 +1,4 @@
-#define NUM_BUCKETS 13
+#define NUM_BUCKETS 53
 
 /**
  * An entry in a hashmap bucket.
@@ -28,6 +28,9 @@ typedef struct Bucket {
 typedef struct HashMap {
     /* The buckets stored in the hashmap */
     Bucket buckets[NUM_BUCKETS];
+
+    /* The number of entries in the hashmap */
+    unsigned long n_entries;
 } HashMap;
 
 /**

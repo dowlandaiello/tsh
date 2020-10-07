@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "hashmap.h"
@@ -91,15 +92,17 @@ void put_hashmap(HashMap *map, char *key, char *value)
     Entry **bkt_head_ptr = &map->buckets[hash_code % NUM_BUCKETS].head;
 
     // Allocate a new entry
-    Entry *new_entry = malloc(sizeof(Entry));
+    Entry *new_entry = calloc(1, sizeof(Entry));
     new_entry->key = key;
     new_entry->value = value;
 
     // If an entry exists in the bucket, make it the next
-    if (*bkt_head_ptr != NULL) {
+    if (*bkt_head_ptr != NULL)
         new_entry->next = *bkt_head_ptr;
-    }
 
     // Put the new entry in the bucket
     *bkt_head_ptr = new_entry;
+
+    // We've added the entry, so n + 1!
+    map->n_entries++;
 }

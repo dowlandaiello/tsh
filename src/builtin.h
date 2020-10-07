@@ -18,9 +18,8 @@ Res cd(Cmd *cmd);
  */
 Res xport(Cmd *cmd);
 
-
 /* All of the available builtin commands */
-typedef Res (*BuiltinCmd)(Cmd*);
+typedef Res (*BuiltinCmd)(Cmd *);
 extern const BuiltinCmd BUILTIN_CMDS[];
 
 /* The names of the builtin commands */
@@ -33,4 +32,4 @@ extern const char *BUILTIN_CMD_NAMES[];
  *
  * @return the status code of the operation
  */
- Res execute_builtin(Cmd *cmd);
+Res execute_builtin(Cmd *cmd);

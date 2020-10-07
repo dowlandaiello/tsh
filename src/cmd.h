@@ -1,9 +1,21 @@
 /**
+ * An internal status code returned by a command.
+ */
+typedef enum InternalStatus {
+    NO_DEALLOC,
+    ERR,
+    OK,
+} InternalStatus;
+
+/**
  * The result of a command's execution.
  */
 typedef struct Res {
     /* The status code */
     int err;
+
+    /* An internal status code */
+    InternalStatus stat;
 
     /* A custom error message */
     char *err_msg;
@@ -42,3 +54,12 @@ void destroy_cmd(Cmd *cmd);
  * @return the status code of the operation
  */
 Res exec(Cmd *cmd);
+
+/**
+ * Executes the given command by evaluating the PATH.
+ * 
+ * @param cmd the command to execute
+ *
+ * @return the status code of the operation
+ */
+Res exec_path(Cmd *cmd);

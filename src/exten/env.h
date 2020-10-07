@@ -6,6 +6,12 @@
 typedef struct Env {
     /* The variables stored in the environment */
     HashMap variables;
+
+    /* Variables in the PATH */
+    HashMap path;
+
+    /* A cached dump of the environment variables */
+    char **cached_dump;
 } Env;
 
 /* The global environment */
@@ -21,3 +27,10 @@ void init_env();
  * (1 indicates success)
  */
 int load_env();
+
+/**
+ * Dumps the key-value entries in the environment to an array of strings.
+ *
+ * @return the key-value pairs in the environment
+ */
+char **dump_env();

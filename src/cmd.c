@@ -8,6 +8,8 @@
 #include <unistd.h>
 
 #include "cmd.h"
+#include "exten/env.h"
+#include "exten/path.h"
 #include "util/str.h"
 
 /**
@@ -43,8 +45,8 @@ Res exec(struct Cmd *cmd)
     int err_shmid = shmget(IPC_PRIVATE, sizeof(int), IPC_CREAT | 0600);
 
     // Spawn a child and wait for the cmd to execute
-    if (fork() == 0) {
-        if (execv(cmd->target, cmd->argv)) {
+    if (fork() == 0)
+        if (execve(cmd->target, cmd->argv, env.cached_dump)) {
             int *status = shmat(err_shmid, NULL, 0);
 
             *status = errno;
@@ -52,17 +54,30 @@ Res exec(struct Cmd *cmd)
 
             exit(0);
         }
-    }
 
     wait(NULL);
 
     // If the child process didn't exit successfully, we will know in main to
     // log ERRNO
     int *status = shmat(err_shmid, NULL, 0);
-    Res res = { *status };
+    Res res = { *status, (InternalStatus){ *status ? ERR : OK } };
 
     shmdt(status);
     shmctl(err_shmid, IPC_RMID, NULL);
 
     return res;
+}
+
+/**
+ * Executes the given command by evaluating the PATH.
+ * 
+ * @param cmd the command to execute
+ *
+ * @return the status code of the operation
+ */
+Res exec_path(struct Cmd *cmd)
+{
+    cmd->target = resolve_path(cmd->target);
+
+    return exec(cmd);
 }
