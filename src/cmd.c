@@ -41,6 +41,10 @@ void destroy_cmd(Cmd *cmd)
  */
 Res exec(struct Cmd *cmd)
 {
+    // No target provided
+    if (!cmd->target || strcmp(cmd->target, "") == 0)
+        return (Res) { -1, (InternalStatus){ ERR }, "no target specified" };
+
     // Anything but zero equals UH OH STINKY
     int err_shmid = shmget(IPC_PRIVATE, sizeof(int), IPC_CREAT | 0600);
 

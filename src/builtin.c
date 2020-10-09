@@ -117,8 +117,8 @@ Res execute_builtin(Cmd *cmd)
     if (strcmp(BUILTIN_CMD_NAMES[cmd_num], cmd->target) == 0)
         return BUILTIN_CMDS[cmd_num](cmd);
 
-    char *err = malloc(sizeof UNRECOGNIZED_CMD_ERR + sizeof cmd->target);
+    char *err = malloc(strlen(UNRECOGNIZED_CMD_ERR) + strlen(cmd->target) + 3);
     sprintf(err, "%s: %s", UNRECOGNIZED_CMD_ERR, cmd->target);
 
-    return (Res){ -1, (InternalStatus){ ERR }, err };
+    return (Res){ -1, (InternalStatus){ DEALLOC_ERR }, err };
 }

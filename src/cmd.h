@@ -3,6 +3,7 @@
  */
 typedef enum InternalStatus {
     NO_DEALLOC,
+    DEALLOC_ERR,
     ERR,
     OK,
 } InternalStatus;

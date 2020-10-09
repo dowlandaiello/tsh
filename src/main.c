@@ -36,17 +36,26 @@ int main()
         if (res.err == 2 && (res = exec_path(&cmd)).err == 2)
             res = execute_builtin(&cmd);
 
-        if (res.err_msg != NULL)
+        if (res.err_msg != NULL) {
             put_shell_message(stderr, res.err_msg);
-        else if (res.err)
+
+            if (res.stat == DEALLOC_ERR)
+                free(res.err_msg);
+        } else if (res.err) {
             log_err(res.err);
+        }
 
         // Unless we are storing the input for an environment variable, clear
         // the input
         if (res.stat != NO_DEALLOC)
             free(input);
+
+        destroy_cmd(&cmd);
     }
 
+    // Cleanup
+    clear_history();
+    rl_clear_history();
     destroy_env();
 
     return 0;

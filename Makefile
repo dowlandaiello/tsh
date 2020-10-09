@@ -8,6 +8,9 @@ source_files := $(shell find src -name *.c ! -path 'src/main.c')
 tsh: $(source_files) src/main.c
 	cc -lreadline -Isrc $(source_files) src/main.c -o tsh
 
+tsh_debug: $(source_files) src/main.c
+	cc -lreadline -Isrc $(source_files) src/main.c -g -o debug
+
 src/%:
 
 # Builds and runs individual test files

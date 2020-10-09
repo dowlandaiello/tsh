@@ -54,3 +54,4 @@ dkms.conf
 # Builds
 tsh
 examples/test_program
+debug
