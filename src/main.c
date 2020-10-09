@@ -47,5 +47,7 @@ int main()
             free(input);
     }
 
+    destroy_env();
+
     return 0;
 }

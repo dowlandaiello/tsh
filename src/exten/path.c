@@ -30,8 +30,7 @@ void recache_path()
         return;
 
     // Copy the value of the entry, since strtok breaks it
-    char *e_val = malloc(sizeof e);
-    strcpy(e_val, e->value);
+    char *e_val = strdup(e->value);
 
     for (char *token = strtok(e_val, ":"); token != NULL;
          token = strtok(NULL, ":")) {

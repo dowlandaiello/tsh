@@ -1,4 +1,5 @@
 #define INITIAL_MAX_LINE_LEN 64
+#define NUM_ENV_PARTS 2
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,7 +33,6 @@ int load_env()
         /* Two substrings should be found for the line */
         if (line_parts[1] == NULL)
             return 0;
-
         put_hashmap(&env.variables, line_parts[0], line_parts[1]);
     }
 
@@ -73,4 +73,34 @@ char **dump_env()
     vars[j] = NULL;
 
     return vars;
+}
+
+/**
+ * Destroys the environment.
+ */
+void destroy_env()
+{
+    // The cached environment dump will no longer be used
+    for (int i = 0; env.cached_dump != NULL && env.cached_dump[i] != NULL; i++)
+        free(env.cached_dump[i]);
+
+    free(env.cached_dump);
+
+    // Manually deallocate all variables and PATH entries
+    HashMap env_parts[NUM_ENV_PARTS] = { env.variables, env.path },
+            curr_env_part = env_parts[0];
+
+    for (int i = 0; i < NUM_ENV_PARTS; curr_env_part = env_parts[++i]) {
+        for (int curr_bucket = 0; curr_bucket < NUM_BUCKETS; curr_bucket++) {
+            for (Entry *curr = curr_env_part.buckets[curr_bucket].last;
+                 curr != NULL;) {
+                // Save the next node to free
+                Entry *prev = curr->prev;
+
+                // Go on to the next node
+                free(curr);
+                curr = prev;
+            }
+        }
+    }
 }

@@ -34,3 +34,8 @@ int load_env();
  * @return the key-value pairs in the environment
  */
 char **dump_env();
+
+/**
+ * Destroys the environment.
+ */
+void destroy_env();

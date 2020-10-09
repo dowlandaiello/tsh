@@ -97,8 +97,12 @@ void put_hashmap(HashMap *map, char *key, char *value)
     new_entry->value = value;
 
     // If an entry exists in the bucket, make it the next
-    if (*bkt_head_ptr != NULL)
+    if (*bkt_head_ptr != NULL) {
+        (*bkt_head_ptr)->prev = new_entry;
         new_entry->next = *bkt_head_ptr;
+    } else {
+        map->buckets[hash_code % NUM_BUCKETS].last = new_entry;
+    }
 
     // Put the new entry in the bucket
     *bkt_head_ptr = new_entry;

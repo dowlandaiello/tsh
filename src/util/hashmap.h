@@ -12,14 +12,20 @@ typedef struct Entry {
 
     /* The next entry */
     struct Entry *next;
+
+    /* The previous entry */
+    struct Entry *prev;
 } Entry;
 
 /**
  * A bucket in a hashmap.
  */
 typedef struct Bucket {
-    /* The next bucket */
+    /* The latest entry in the bucket */
     Entry *head;
+
+    /* The first entry in the bucket */
+    Entry *last;
 } Bucket;
 
 /**
