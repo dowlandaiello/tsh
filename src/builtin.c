@@ -11,14 +11,31 @@
 #include "util/str.h"
 
 #define UNRECOGNIZED_CMD_ERR "invalid command"
+#define SHELL_VERSION "0.1.0"
 
 /* All of the available builtin commands */
-const BuiltinCmd BUILTIN_CMDS[] = { NULL,  bugreport, cd,   NULL,
+const BuiltinCmd BUILTIN_CMDS[] = { about, bugreport, cd,   NULL,
                                     xport, NULL,      NULL, pphappy };
 
 /* The names of the builtin commands */
-const char *BUILTIN_CMD_NAMES[] = { "",       "bugreport", "cd", "",
+const char *BUILTIN_CMD_NAMES[] = { "about",  "bugreport", "cd", "",
                                     "export", "",          "",   "hi" };
+
+/**
+ * A command that prints out some info about the shell.
+ *
+ * @param cmd the cmd
+ *
+ * @return the status code
+ */
+Res about(Cmd *cmd)
+{
+    printf("The tiny shell (tsh) v%s by Dowland Z. Aiello.\n\nLicensed to the "
+           "public under the MIT license.\n",
+           SHELL_VERSION);
+
+    return (Res){ 0, (InternalStatus){ OK } };
+}
 
 /**
  * A command used to report a bug.

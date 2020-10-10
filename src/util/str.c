@@ -38,7 +38,13 @@ char **split(char *str, char *delim)
      * than expected. 8 is used as the initial capacity of the buffer.
      */
     int capacity = INITIAL_SUBSTR_PARTS_ALLOCATED, j;
-    char **parts = malloc(sizeof(char *) * INITIAL_SUBSTR_PARTS_ALLOCATED);
+    char **parts = malloc(sizeof(char *) * INITIAL_SUBSTR_PARTS_ALLOCATED), *curr;
+
+    if (!(curr = strchr(str, ' ')))
+        parts[0] = str;
+    else
+        while (curr != NULL)
+            parts[j++] = curr;
 
     // Get the next token in the string before each occurrence of the delimiter
     char *saveptr, *curr_part;

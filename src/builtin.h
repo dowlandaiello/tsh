@@ -1,6 +1,15 @@
 #include "cmd.h"
 
 /**
+ * A command that prints out some info about the shell.
+ *
+ * @param cmd the cmd
+ *
+ * @return the status code
+ */
+Res about(Cmd *cmd);
+
+/**
  * WidepeepoHappy
  *
  * @param cmd the cmd
