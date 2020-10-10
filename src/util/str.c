@@ -70,7 +70,7 @@ char **split(char *str, char *delim)
 
     // Null-terminate the list
     expand(&parts, j, &capacity);
-    parts[j] = NULL;
+    parts[++j] = NULL;
 
     return parts;
 }
