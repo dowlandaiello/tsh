@@ -23,6 +23,22 @@ void expand(char ***parts, const int i, int *capacity)
 }
 
 /**
+ * Gets the next substring at the next occurrence of d or d2.
+ */
+char *strchr_or(char *s, char *d, char *d2, int *in_quote)
+{
+    d = strchr(s, d[0]);
+
+    if (d2 != NULL && ((d2 = strchr(s, d2[0])) < d || *in_quote) && d2) {
+        *in_quote = !*in_quote;
+
+        return d2;
+    }
+
+    return !*in_quote ? d : s;
+}
+
+/**
  * Splits the given string into an array of strings on each occurrence of the
  * delimiter.
  *
@@ -37,28 +53,22 @@ char **split(char *str, char *delim)
      * Dynamically allocate more space if more parts are found in the string
      * than expected. 8 is used as the initial capacity of the buffer.
      */
-    int capacity = INITIAL_SUBSTR_PARTS_ALLOCATED, j;
+    int capacity = INITIAL_SUBSTR_PARTS_ALLOCATED, j = 0, in_quote = 0;
     char **parts = malloc(sizeof(char *) * INITIAL_SUBSTR_PARTS_ALLOCATED), *curr;
 
-    if (!(curr = strchr(str, ' ')))
-        parts[0] = str;
-    else
-        while (curr != NULL)
-            parts[j++] = curr;
+    // a bunch of args
+    // ^
+    // | this one right here
+    parts[0] = str;
 
-    // Get the next token in the string before each occurrence of the delimiter
-    char *saveptr, *curr_part;
-    curr_part = strtok_r(str, delim, &saveptr);
-
-    // Keep getting tokens and storing them in parts, increasing the capcaity
-    // if necessary, until NULL or '\0' is hit.
-    for (j = 0; curr_part != NULL;
-         curr_part = strtok_r(NULL, delim, &saveptr)) {
+    for (curr = strchr_or(str, delim, "\"", &in_quote); curr != NULL; curr = strchr_or(curr, delim, "\"", &in_quote)) {
         expand(&parts, j, &capacity);
 
-        parts[j++] = curr_part;
+        *curr = '\0';
+        parts[!in_quote ? ++j : j] = ++curr;
     }
 
+    // Null-terminate the list
     expand(&parts, j, &capacity);
     parts[j] = NULL;
 
