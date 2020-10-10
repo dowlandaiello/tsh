@@ -55,7 +55,6 @@ int main()
 
     // Cleanup
     clear_history();
-    rl_clear_history();
     destroy_env();
 
     return 0;
