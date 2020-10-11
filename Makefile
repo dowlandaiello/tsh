@@ -13,7 +13,8 @@ tsh_debug: $(source_files) src/main.c
 
 # Targets a riscv64 web demo machine
 web_demo:
-	riscv64-unknown-elf-gcc -lreadline -Isrc $(source_files) src/main.c -o tsh
+	riscv64-linux-gnu-gcc -lreadline -Isrc $(source_files) src/main.c -o tsh
+
 src/%:
 
 # Builds and runs individual test files
