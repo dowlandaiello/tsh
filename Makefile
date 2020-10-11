@@ -27,8 +27,9 @@ lib/readline/libreadline.a: .gitmodules
 	cd lib/readline && ./configure && make
 
 # Clones submodules
+.PHONY: .gitmodules
 .gitmodules:
-	git submodule init && git submodule update
+	(stat .gitsubmodules || git submodule init) && git submodule update
 
 # Builds and runs individual test files
 tests/%:
