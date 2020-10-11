@@ -1,39 +1,43 @@
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 
+# Use vendored readline
+readline := ./lib/readline/libreadline.a ./lib/readline/libhistory.a
+libreadline := -I ./lib/readline -lreadline
+
 test_binaries := $(subst .c, , $(wildcard tests/*))
 example_binaries := $(subst .c, , $(wildcard examples/*.c))
 source_files := $(shell find src -name *.c ! -path 'src/main.c')
-core_bin := lib/readline/readline.a $(source_files) src/main.c
+core_bin := $(readline) $(source_files) src/main.c
 
 # Builds the tiny shell
 tsh: $(core_bin)
-	cc -lreadline -Isrc $(source_files) src/main.c -o tsh
+	cc $(libreadline) -Isrc $(source_files) src/main.c -o tsh
 
 tsh_debug: $(core_bin)
-	cc -lreadline -Isrc $(source_files) src/main.c -g -o debug
+	cc $(libreadline) -Isrc $(source_files) src/main.c -g -o debug
 
 # Targets a riscv64 web demo machine
-web_demo: $(subst readline.a, readline_risc.a, $(core_bin))
-	riscv64-linux-gnu-gcc -lreadline -Isrc $(source_files) src/main.c -o tsh
+web_demo: $(subst libreadline.a, readline_risc.a, $(core_bin))
+	riscv64inux-gnu-gcc $(libreadline) -Isrc $(source_files) src/main.c -o tsh
 
 src/%:
 
 # Builds readline
-lib/readline/readline.a:
+lib/readline/libreadline.a:
 	cd lib/readline && ./configure && make
 
-lib/readline/readline_risc.a:
-	cd lib/readline && CC=riscv64-linux-gnu-gcc ./configure && make
+lib/readline/libreadline_risc.a:
+	cd lib/readline && CC=riscv64inux-gnu-gcc ./configure && make
 
 # Builds and runs individual test files
 tests/%:
 	@echo "RUNNING TEST " $@; echo ""
-	cc -lreadline -Isrc $(source_files) $@.c -o $@ && $@ && rm $@
+	cc $(libreadline) -Isrc $(source_files) $@.c -o $@ && $@ && rm $@
 	@echo ""; echo "DONE"; echo ""
 
 # Builds an individual example file
 examples/%:
-	cc -lreadline $@.c -o $@
+	cc $(libreadline) $@.c -o $@
 
 # Install to path
 .PHONY: install
@@ -51,7 +55,7 @@ clean_examples:
 # Debugs the specified file
 .PHONY: debug
 debug: examples
-	cc -lreadline -g -Isrc $(shell find src -name *.c) $(f) -o debug && lldb debug && rm debug
+	cc $(libreadline) -g -Isrc $(shell find src -name *.c) $(f) -o debug && lldb debug && rm debug
 	@$(MAKE) -f $(THIS_FILE) clean_examples
 
 # Runs all unit tests
