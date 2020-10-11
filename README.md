@@ -18,4 +18,4 @@ enough features. ¯\\\_(ツ)\_/¯
 - [x] Running targets
 - [x] Environment variables
 - [x] PATH resolution
-- [x] Some builtin commands
+- [x] A few builtin commands
