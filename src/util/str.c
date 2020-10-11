@@ -27,15 +27,27 @@ void expand(char ***parts, const int i, int *capacity)
  */
 char *strchr_or(char *s, char *d, char *d2, int *in_quote)
 {
-    d = strchr(s, d[0]);
+    char *d_idx = NULL;
 
-    if (d2 != NULL && ((d2 = strchr(s, d2[0])) < d || *in_quote) && d2) {
-        *in_quote = !*in_quote;
+    // Wait until the last non-delim character has been found,
+    // or until the second prioritized delimiter has occurred
+    for (char *curr = s; *curr != '\0'; curr++) {
+        if (*curr == *d && !*in_quote) {
+            d_idx = curr;
+        } else {
+            if (d_idx != NULL) {
+                break;
+            }
 
-        return d2;
+            if (*curr == *d2) {
+                *in_quote = !*in_quote;
+
+                return curr;
+            }
+        }
     }
 
-    return !*in_quote ? d : s;
+    return d_idx;
 }
 
 /**
@@ -65,6 +77,7 @@ char **split(char *str, char *delim)
         expand(&parts, j, &capacity);
 
         *curr = '\0';
+
         parts[!in_quote ? ++j : j] = ++curr;
     }
 
