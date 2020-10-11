@@ -3,19 +3,27 @@ THIS_FILE := $(lastword $(MAKEFILE_LIST))
 test_binaries := $(subst .c, , $(wildcard tests/*))
 example_binaries := $(subst .c, , $(wildcard examples/*.c))
 source_files := $(shell find src -name *.c ! -path 'src/main.c')
+core_bin := lib/readline/readline.a $(source_files) src/main.c
 
 # Builds the tiny shell
-tsh: $(source_files) src/main.c
+tsh: $(core_bin)
 	cc -lreadline -Isrc $(source_files) src/main.c -o tsh
 
-tsh_debug: $(source_files) src/main.c
+tsh_debug: $(core_bin)
 	cc -lreadline -Isrc $(source_files) src/main.c -g -o debug
 
 # Targets a riscv64 web demo machine
-web_demo:
+web_demo: $(subst readline.a, readline_risc.a, $(core_bin))
 	riscv64-linux-gnu-gcc -lreadline -Isrc $(source_files) src/main.c -o tsh
 
 src/%:
+
+# Builds readline
+lib/readline/readline.a:
+	cd lib/readline && ./configure && make
+
+lib/readline/readline_risc.a:
+	cd lib/readline && CC=riscv64-linux-gnu-gcc ./configure && make
 
 # Builds and runs individual test files
 tests/%:
