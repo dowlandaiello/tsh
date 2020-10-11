@@ -23,20 +23,12 @@ web_demo: ./lib/readline/risc/libreadline.a $(source_files) src/main.c
 src/%:
 
 # Builds readline
-lib/readline/libreadline.a:
+lib/readline/libreadline.a: .gitmodules
 	cd lib/readline && ./configure && make
 
-lib/readline/risc/libreadline.a: lib/ncurses/risc/lib/libncurses.a
-	mkdir -p lib/readline/risc && cd lib/readline/risc && CC=riscv64-linux-gnu-gcc ../configure --build=x86_64 --host=riscv64-linux-gnu && make
-
-# Builds ncurses for risc
-lib/ncurses/risc/lib/ncurses.a: lib/ncurses/risc/README
-	cd lib/ncurses/risc && make && mkdir -p /usr/riscv64-linux-gnu/bin && sudo ln -s /usr/bin/tic /usr/riscv64-linux-gnu/bin/tic && sudo make DESTDIR=/usr/riscv64-linux-gnu/lib install
-
-# Downloads ncurses
-lib/ncurses/risc/README:
-	mkdir -p lib/ncurses/risc && cd lib/ncurses/risc && curl https://invisible-island.net/datafiles/release/ncurses.tar.gz -o ncurses.tar.gz && \
-	tar -xvf ncurses.tar.gz && rm ncurses.tar.gz && mv ncurses-*/* ./ && rm -rf ncurses-* && ./configure --build=x86_64 --host=riscv64-linux-gnu --without-ada
+# Clones submodules
+.gitmodules:
+	git submodule init && git submodule update
 
 # Builds and runs individual test files
 tests/%:
