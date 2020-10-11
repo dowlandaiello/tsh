@@ -17,8 +17,8 @@ tsh_debug: $(core_bin)
 	cc $(libreadline) -Isrc $(source_files) src/main.c -g -o debug
 
 # Targets a riscv64 web demo machine
-web_demo: $(subst libreadline.a, readline_risc.a, $(core_bin))
-	riscv64inux-gnu-gcc $(libreadline) -Isrc $(source_files) src/main.c -o tsh
+web_demo: ./lib/readline/risc/libreadline.a $(source_files) src/main.c
+	riscv64-linux-gnu-gcc $(subst /readline/, /readline/risc, $(libreadline)) -Isrc $(source_files) src/main.c -o tsh
 
 src/%:
 
@@ -26,8 +26,17 @@ src/%:
 lib/readline/libreadline.a:
 	cd lib/readline && ./configure && make
 
-lib/readline/libreadline_risc.a:
-	cd lib/readline && CC=riscv64inux-gnu-gcc ./configure && make
+lib/readline/risc/libreadline.a: lib/ncurses/risc/lib/libncurses.a
+	mkdir -p lib/readline/risc && cd lib/readline/risc && CC=riscv64-linux-gnu-gcc ../configure --build=x86_64 --host=riscv64-linux-gnu && make
+
+# Builds ncurses for risc
+lib/ncurses/risc/lib/ncurses.a: lib/ncurses/risc/README
+	cd lib/ncurses/risc && make && mkdir -p /usr/riscv64-linux-gnu/bin && sudo ln -s /usr/bin/tic /usr/riscv64-linux-gnu/bin/tic && sudo make DESTDIR=/usr/riscv64-linux-gnu/lib install
+
+# Downloads ncurses
+lib/ncurses/risc/README:
+	mkdir -p lib/ncurses/risc && cd lib/ncurses/risc && curl https://invisible-island.net/datafiles/release/ncurses.tar.gz -o ncurses.tar.gz && \
+	tar -xvf ncurses.tar.gz && rm ncurses.tar.gz && mv ncurses-*/* ./ && rm -rf ncurses-* && ./configure --build=x86_64 --host=riscv64-linux-gnu --without-ada
 
 # Builds and runs individual test files
 tests/%:
