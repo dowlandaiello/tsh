@@ -16,9 +16,9 @@ tsh: $(core_bin)
 tsh_debug: $(core_bin)
 	cc $(libreadline) -Isrc $(source_files) src/main.c -g -o debug
 
-# Targets a riscv64 web demo machine
-web_demo: ./lib/readline/risc/libreadline.a $(source_files) src/main.c
-	riscv64-linux-gnu-gcc $(subst /readline/, /readline/risc, $(libreadline)) -Isrc $(source_files) src/main.c -o tsh
+# Targets an x86 web demo machine
+web_demo: $(core_bin)
+	cc $(libreadline) -m32 -Isrc $(source_files) src/main.c -o tsh
 
 src/%:
 
