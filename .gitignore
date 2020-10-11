@@ -51,6 +51,9 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Deps
+lib/ncurses
+
 # Builds
 tsh
 examples/test_program
