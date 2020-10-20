@@ -45,6 +45,24 @@ Res cd(Cmd *cmd);
  */
 Res xport(Cmd *cmd);
 
+/**
+ * Pushes a new path to the path stack.
+ *
+ * @param cmd the command specifying what path to add to the stack
+ *
+ * @return the status code
+ */
+Res pushd(Cmd *cmd);
+
+/**
+ * Pops a path from the path stack.
+ *
+ * @param cmd the command
+ *
+ * @return the status code
+ */
+Res popd(Cmd *cmd);
+
 /* All of the available builtin commands */
 typedef Res (*BuiltinCmd)(Cmd *);
 extern const BuiltinCmd BUILTIN_CMDS[];

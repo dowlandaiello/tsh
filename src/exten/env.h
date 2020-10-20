@@ -1,4 +1,5 @@
 #include "util/hashmap.h"
+#include "util/stack.h"
 
 /**
  * An environment in which variables are stored.
@@ -19,6 +20,9 @@ extern Env env;
 
 /* Variables unexposed to the environment */
 extern Env private_vars;
+
+/* The stack that pushd and popd deals with */
+extern Stack dir_stack;
 
 /* Initializes the global environment. */
 void init_env();

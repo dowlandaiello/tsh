@@ -9,12 +9,15 @@
 #include "util/str.h"
 
 Env env, private_vars;
+Stack dir_stack;
 
 /* Initializes the global environment. */
 void init_env()
 {
     env = (Env){ make_hashmap(), make_hashmap(), NULL };
     private_vars = (Env){ make_hashmap(), make_hashmap(), NULL };
+
+    dir_stack = (Stack){ NULL };
 }
 
 /* Loads the environment from a .env file in the immediate directory */

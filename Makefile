@@ -66,7 +66,7 @@ test: examples $(test_binaries) clean_examples
 
 .PHONY: format
 format:
-	clang-format -i $(shell find . -name *.c -or -name *.h) -style=file
+	clang-format -i $(shell find tests src -name "*.c" -or -name "*.h") -style=file
 
 # Removes all object files, and deletes the built shell
 .PHONY: clean
