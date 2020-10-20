@@ -17,6 +17,9 @@ typedef struct Env {
 /* The global environment */
 extern Env env;
 
+/* Variables unexposed to the environment */
+extern Env private_vars;
+
 /* Initializes the global environment. */
 void init_env();
 

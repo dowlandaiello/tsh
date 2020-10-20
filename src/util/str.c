@@ -85,14 +85,16 @@ char **split(char *str, char *delim)
      * than expected. 8 is used as the initial capacity of the buffer.
      */
     int capacity = INITIAL_SUBSTR_PARTS_ALLOCATED, j = 0, in_quote = 0;
-    char **parts = malloc(sizeof(char *) * INITIAL_SUBSTR_PARTS_ALLOCATED), *curr;
+    char **parts = malloc(sizeof(char *) * INITIAL_SUBSTR_PARTS_ALLOCATED),
+         *curr;
 
     // a bunch of args
     // ^
     // | this one right here
     parts[0] = str;
 
-    for (curr = strchr_or(str, delim, "\"", &in_quote); curr != NULL; curr = strchr_or(curr, delim, "\"", &in_quote)) {
+    for (curr = strchr_or(str, delim, "\"", &in_quote); curr != NULL;
+         curr = strchr_or(curr, delim, "\"", &in_quote)) {
         expand(&parts, j, &capacity);
 
         *(curr++) = '\0';

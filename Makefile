@@ -1,7 +1,7 @@
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 
 # Use vendored readline
-readline := ./lib/readline/libreadline.a ./lib/readline/libhistory.a
+readline := lib/readline/libreadline.a
 libreadline := -I ./lib/readline -lreadline
 
 test_binaries := $(subst .c, , $(wildcard tests/*))
@@ -24,12 +24,12 @@ src/%:
 
 # Builds readline
 lib/readline/libreadline.a: .gitmodules
-	cd lib/readline && ./configure && make
+	stat lib/readline/libreadline.a || (cd lib/readline && ./configure && make)
 
 # Clones submodules
 .PHONY: .gitmodules
 .gitmodules:
-	(stat .gitsubmodules || git submodule init) && git submodule update
+	(stat .gitmodules || git submodule init) && git submodule update
 
 # Builds and runs individual test files
 tests/%:

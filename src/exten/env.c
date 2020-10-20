@@ -8,12 +8,13 @@
 #include "env.h"
 #include "util/str.h"
 
-Env env;
+Env env, private_vars;
 
 /* Initializes the global environment. */
 void init_env()
 {
     env = (Env){ make_hashmap(), make_hashmap(), NULL };
+    private_vars = (Env){ make_hashmap(), make_hashmap(), NULL };
 }
 
 /* Loads the environment from a .env file in the immediate directory */
@@ -75,19 +76,17 @@ char **dump_env()
     return vars;
 }
 
-/**
- * Destroys the environment.
- */
-void destroy_env()
+void destroy(Env *env)
 {
     // The cached environment dump will no longer be used
-    for (int i = 0; env.cached_dump != NULL && env.cached_dump[i] != NULL; i++)
-        free(env.cached_dump[i]);
+    for (int i = 0; env->cached_dump != NULL && env->cached_dump[i] != NULL;
+         i++)
+        free(env->cached_dump[i]);
 
-    free(env.cached_dump);
+    free(env->cached_dump);
 
     // Manually deallocate all variables and PATH entries
-    HashMap env_parts[NUM_ENV_PARTS] = { env.variables, env.path },
+    HashMap env_parts[NUM_ENV_PARTS] = { env->variables, env->path },
             curr_env_part = env_parts[0];
 
     for (int i = 0; i < NUM_ENV_PARTS; curr_env_part = env_parts[++i]) {
@@ -103,4 +102,13 @@ void destroy_env()
             }
         }
     }
+}
+
+/**
+ * Destroys the environment.
+ */
+void destroy_env()
+{
+    destroy(&env);
+    destroy(&private_vars);
 }
