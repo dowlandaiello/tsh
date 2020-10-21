@@ -154,7 +154,8 @@ Res popd(Cmd *cmd)
 
     free(pop_stack(&dir_stack));
 
-    return (Res){ chdir((char *) dir_stack.head->contents) ? errno : 0, (InternalStatus){ ERR } };
+    return (Res){ chdir((char *)dir_stack.head->contents) ? errno : 0,
+                  (InternalStatus){ ERR } };
 }
 
 /**
@@ -173,7 +174,8 @@ Res execute_builtin(Cmd *cmd)
                   (sizeof BUILTIN_CMD_NAMES / sizeof(char *));
 
     // But should be double checked
-    if (strcmp(BUILTIN_CMD_NAMES[cmd_num], cmd->target) == 0 || !strcmp(cmd->target, "popd"))
+    if (strcmp(BUILTIN_CMD_NAMES[cmd_num], cmd->target) == 0 ||
+        !strcmp(cmd->target, "popd"))
         return BUILTIN_CMDS[cmd_num](cmd);
 
     char *err = malloc(strlen(UNRECOGNIZED_CMD_ERR) + strlen(cmd->target) + 3);
