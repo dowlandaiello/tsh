@@ -49,6 +49,8 @@ int main()
         // the input
         if (res.stat != NO_DEALLOC)
             free(input);
+        else
+            push_stack(&builtin_cmd_residue, input);
 
         destroy_cmd(&cmd);
     }

@@ -9,7 +9,7 @@
 #include "util/str.h"
 
 Env env, private_vars;
-Stack dir_stack;
+Stack dir_stack, builtin_cmd_residue;
 
 /* Initializes the global environment. */
 void init_env()
@@ -58,7 +58,7 @@ char **dump_env()
         free(env.cached_dump);
 
     // Each of the entries in the hashmap
-    char **vars = malloc(sizeof(char *) * env.variables.n_entries + 1);
+    char **vars = calloc(env.variables.n_entries + 1, sizeof(char *));
     int j = 0;
 
     // Dump data in each of the hashmap's buckets
@@ -73,8 +73,6 @@ char **dump_env()
             vars[j++] = combined_entry;
         }
     }
-
-    vars[j] = NULL;
 
     return vars;
 }
@@ -114,4 +112,15 @@ void destroy_env()
 {
     destroy(&env);
     destroy(&private_vars);
+
+    StackNode *curr = builtin_cmd_residue.head;
+
+    while (curr != NULL) {
+        StackNode *next = curr->prev;
+
+        free(curr->contents);
+        free(curr);
+
+        curr = next;
+    }
 }

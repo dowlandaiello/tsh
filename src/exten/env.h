@@ -24,6 +24,9 @@ extern Env private_vars;
 /* The stack that pushd and popd deals with */
 extern Stack dir_stack;
 
+/* Commands not freed at execution time */
+extern Stack builtin_cmd_residue;
+
 /* Initializes the global environment. */
 void init_env();
 

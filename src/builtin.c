@@ -111,6 +111,7 @@ Res xport(Cmd *cmd)
                       "not enough arguments (KEY=VALUE expected)" };
 
     put_hashmap(&env.variables, xprt_entry_parts[0], xprt_entry_parts[1]);
+    free(xprt_entry_parts);
 
     env.cached_dump = dump_env();
     recache_path();
@@ -147,7 +148,7 @@ Res pushd(Cmd *cmd)
  */
 Res popd(Cmd *cmd)
 {
-    if (dir_stack.head == NULL || dir_stack.head->contents == NULL)
+    if (dir_stack.head == NULL || dir_stack.head->prev == NULL)
         return (
             Res){ -1, (InternalStatus){ ERR }, "popd: directory stack empty" };
 

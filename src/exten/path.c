@@ -49,6 +49,8 @@ void recache_path()
                 sizeof(char) * (parent_path_len + strlen(de->d_name) + 2));
             sprintf(qualified_name, "%s/%s", token, de->d_name);
 
+            push_stack(&builtin_cmd_residue, qualified_name);
+
             // Register an entry in the PATH for the actual binary
             put_hashmap(&env.path,
                         &qualified_name[parent_path_len + 1],
